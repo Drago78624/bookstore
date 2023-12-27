@@ -1,4 +1,4 @@
-import 'package:bookstore/main.dart';
+import 'package:bookstore/screens/home_screen.dart';
 import 'package:bookstore/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +19,9 @@ class _CheckUserAuthState extends State<CheckUserAuth> {
   checkUserAuth() {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      return MyHomePage(title: "homepage");
+      return const Home(title: "homepage");
     } else {
-      return Login();
+      return const Login();
     }
   }
 }

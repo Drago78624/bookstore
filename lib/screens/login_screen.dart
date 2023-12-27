@@ -1,8 +1,11 @@
 import 'package:bookstore/auth/forgot_password.dart';
-import 'package:bookstore/main.dart';
+import 'package:bookstore/helpers/validate_email.dart';
+import 'package:bookstore/screens/home_screen.dart';
 import 'package:bookstore/screens/register_screen.dart';
+import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -17,14 +20,32 @@ class _LoginState extends State<Login> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  String? validateEmail(String email) {
-    RegExp emailRegex = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    final isEmailValid = emailRegex.hasMatch(email);
-    if (!isEmailValid) {
-      return "Please enter a valid email";
+  loginWithGoogle() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+        clientId:
+            "510404350394-3dmfmblrvkmdmuev6ginv27e547pad2m.apps.googleusercontent.com");
+
+    try {
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser != null) {
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        return await FirebaseAuth.instance
+            .signInWithCredential(credential)
+            .then((value) {
+          return Navigator.pushNamed(context, "/home");
+        });
+      }
+    } catch (ex) {
+      print(ex);
     }
-    return null;
   }
 
   void _login() async {
@@ -36,11 +57,10 @@ class _LoginState extends State<Login> {
         userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password)
             .then((value) {
-          return Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyHomePage(title: "homepage"),
-              ));
+          return Navigator.pushNamed(
+            context,
+            "/home",
+          );
         });
       } on FirebaseAuthException catch (ex) {
         print(ex.code);
@@ -87,29 +107,20 @@ class _LoginState extends State<Login> {
                 const SizedBox(
                   height: 60,
                 ),
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    label: Text("Email Address"),
-                    border: OutlineInputBorder(),
-                  ),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) => validateEmail(value!),
-                ),
+                CustomTextField(
+                    fieldController: emailController,
+                    fieldValidator: (value) => validateEmail(value!),
+                    label: "Email Address"),
                 const SizedBox(
                   height: 20,
                 ),
-                TextFormField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    label: Text("Password"),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) => value!.length < 4
-                      ? "Password should be atleast 4 characters"
+                CustomTextField(
+                  fieldController: passwordController,
+                  fieldValidator: (value) => value!.length < 8
+                      ? "Password should be atleast 8 characters"
                       : null,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  label: "Password",
+                  isObscureText: true,
                 ),
                 const SizedBox(
                   height: 20,
@@ -118,33 +129,33 @@ class _LoginState extends State<Login> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _login,
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(fontSize: 17),
-                    ),
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
                         backgroundColor: Colors.deepPurple,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 25)),
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(fontSize: 17),
+                    ),
                   ),
                 ),
                 const Divider(height: 40),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Login with Google",
-                      style: TextStyle(fontSize: 17),
-                    ),
+                    onPressed: loginWithGoogle,
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 25)),
+                    child: const Text(
+                      "Login with Google",
+                      style: TextStyle(fontSize: 17),
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -156,12 +167,7 @@ class _LoginState extends State<Login> {
                     const Text("Don't have an account ?"),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Register(),
-                          ),
-                        );
+                        Navigator.pushNamed(context, "/register");
                       },
                       child: const Text("Register"),
                     )
@@ -171,14 +177,14 @@ class _LoginState extends State<Login> {
                   height: 20,
                 ),
                 TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ForgotPassword(),
-                          ));
-                    },
-                    child: Text("Forgot Password?"))
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      "/forgot-password",
+                    );
+                  },
+                  child: Text("Forgot Password?"),
+                )
               ],
             ),
           ),

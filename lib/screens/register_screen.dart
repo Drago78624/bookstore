@@ -1,7 +1,10 @@
-import 'package:bookstore/main.dart';
+import 'package:bookstore/helpers/validate_email.dart';
+import 'package:bookstore/screens/home_screen.dart';
 import 'package:bookstore/screens/login_screen.dart';
+import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -17,16 +20,6 @@ class _RegisterState extends State<Register> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  String? validateEmail(String email) {
-    RegExp emailRegex = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    final isEmailValid = emailRegex.hasMatch(email);
-    if (!isEmailValid) {
-      return "Please enter a valid email";
-    }
-    return null;
-  }
-
   void _register() async {
     if (_formKey.currentState!.validate()) {
       final email = emailController.text.toString();
@@ -36,11 +29,10 @@ class _RegisterState extends State<Register> {
         userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password)
             .then((value) {
-          return Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyHomePage(title: "homepage"),
-              ));
+          return Navigator.pushNamed(
+            context,
+            "/home",
+          );
         });
       } on FirebaseAuthException catch (ex) {
         showDialog(
@@ -80,43 +72,29 @@ class _RegisterState extends State<Register> {
                 const SizedBox(
                   height: 60,
                 ),
-                TextFormField(
-                  controller: fullNameController,
-                  decoration: const InputDecoration(
-                    label: Text("Full Name"),
-                    border: OutlineInputBorder(),
-                  ),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) => value!.length < 4
-                      ? "Name should be atleast 4 characters"
-                      : null,
-                ),
+                CustomTextField(
+                    fieldController: fullNameController,
+                    fieldValidator: (value) => value!.length < 4
+                        ? "Name should be atleast 4 characters"
+                        : null,
+                    label: "Full Name"),
                 const SizedBox(
                   height: 20,
                 ),
-                TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    label: Text("Email Address"),
-                    border: OutlineInputBorder(),
-                  ),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) => validateEmail(value!),
-                ),
+                CustomTextField(
+                    fieldController: emailController,
+                    fieldValidator: (value) => validateEmail(value!),
+                    label: "Email Address"),
                 const SizedBox(
                   height: 20,
                 ),
-                TextFormField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    label: Text("Password"),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) => value!.length < 4
-                      ? "Password should be atleast 4 characters"
+                CustomTextField(
+                  fieldController: passwordController,
+                  fieldValidator: (value) => value!.length < 8
+                      ? "Password should be atleast 8 characters"
                       : null,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  label: "Password",
+                  isObscureText: true,
                 ),
                 const SizedBox(
                   height: 20,
@@ -163,12 +141,7 @@ class _RegisterState extends State<Register> {
                     const Text("Already have an account ?"),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Login(),
-                          ),
-                        );
+                        Navigator.pushNamed(context, "/login");
                       },
                       child: const Text("Login"),
                     )

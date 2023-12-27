@@ -1,6 +1,7 @@
+import 'package:bookstore/helpers/validate_email.dart';
 import 'package:bookstore/screens/login_screen.dart';
+import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 final _formKey = GlobalKey<FormState>();
@@ -15,16 +16,6 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController emailController = TextEditingController();
   bool isMailSent = false;
-
-  String? validateEmail(String email) {
-    RegExp emailRegex = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    final isEmailValid = emailRegex.hasMatch(email);
-    if (!isEmailValid) {
-      return "Please enter a valid email";
-    }
-    return null;
-  }
 
   void _resetPassword() async {
     if (_formKey.currentState!.validate()) {
@@ -47,18 +38,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               Text(
                 "Check your password reset mail at ${emailController.text}",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
               TextButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => Login(),
-                      ),
+                      "/login",
                     );
                   },
-                  child: Text("Login"))
+                  child: const Text("Login"))
             ],
           ),
         ),
@@ -66,7 +55,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text("Forgot Password"),
+        title: const Text("Forgot Password"),
       ),
       body: Center(
         child: Padding(
@@ -76,16 +65,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    label: Text("Email Address"),
-                    border: OutlineInputBorder(),
-                  ),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) => validateEmail(value!),
+                CustomTextField(
+                  fieldController: emailController,
+                  fieldValidator: (value) => validateEmail(value!),
+                  label: "Email Address",
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SizedBox(
