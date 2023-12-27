@@ -1,5 +1,5 @@
+import 'package:bookstore/auth/check_user_auth.dart';
 import 'package:bookstore/screens/login_screen.dart';
-import 'package:bookstore/screens/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Register(),
+      home: CheckUserAuth(),
     );
   }
 }
@@ -53,12 +53,13 @@ class _MyHomePageState extends State<MyHomePage> {
           actions: [
             TextButton(
                 onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Login(),
-                      ));
+                  await FirebaseAuth.instance.signOut().then((value) {
+                    return Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Login(),
+                        ));
+                  });
                 },
                 child: Text("Logout"))
           ],

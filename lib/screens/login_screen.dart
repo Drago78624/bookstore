@@ -1,3 +1,4 @@
+import 'package:bookstore/auth/forgot_password.dart';
 import 'package:bookstore/main.dart';
 import 'package:bookstore/screens/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,7 +28,6 @@ class _LoginState extends State<Login> {
   }
 
   void _login() async {
-    print("loggin in ");
     if (_formKey.currentState!.validate()) {
       final email = emailController.text.toString();
       final password = passwordController.text.toString();
@@ -166,7 +166,19 @@ class _LoginState extends State<Login> {
                       child: const Text("Register"),
                     )
                   ],
-                )
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ForgotPassword(),
+                          ));
+                    },
+                    child: Text("Forgot Password?"))
               ],
             ),
           ),
