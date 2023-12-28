@@ -1,10 +1,15 @@
 import 'package:bookstore/helpers/validate_email.dart';
 import 'package:bookstore/screens/home_screen.dart';
 import 'package:bookstore/screens/login_screen.dart';
+import 'package:bookstore/widgets/auth/auth_button.dart';
 import 'package:bookstore/widgets/custom_text_field.dart';
+import 'package:bookstore/widgets/gradient_container.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sign_in_button/sign_in_button.dart';
+
+final db = FirebaseFirestore.instance;
 
 final _formKey = GlobalKey<FormState>();
 
@@ -19,15 +24,36 @@ class _RegisterState extends State<Register> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+  bool isObscure = true;
+
+  String? validateConfirmPassword(String confirmPassword) {
+    if (confirmPassword.length < 8) {
+      return "Password should be atleast 8 characters";
+    } else if (confirmPassword != passwordController.text) {
+      return "Passwords do not match";
+    }
+    return null;
+  }
 
   void _register() async {
     if (_formKey.currentState!.validate()) {
       final email = emailController.text.toString();
       final password = passwordController.text.toString();
+      final fullName = fullNameController.text.toString();
       UserCredential? userCredential;
       try {
         userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
+        // final userData = await db.collection("users").add({
+        //   "fullName": fullName,
+        //   "email": email,
+        //   "password": password,
+        //   "addresses": [],
+        //   "paymentMethods": []
+        // }).then((documentSnapshot) =>
+        //     print("Added Data with ID: ${documentSnapshot.id}"));
         Navigator.pushNamed(
           context,
           "/home",
@@ -55,98 +81,100 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  "Register",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 60,
-                ),
-                CustomTextField(
-                    fieldController: fullNameController,
-                    fieldValidator: (value) => value!.length < 4
-                        ? "Name should be atleast 4 characters"
-                        : null,
-                    label: "Full Name"),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomTextField(
-                    fieldController: emailController,
-                    fieldValidator: (value) => validateEmail(value!),
-                    label: "Email Address"),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomTextField(
-                  fieldController: passwordController,
-                  fieldValidator: (value) => value!.length < 8
-                      ? "Password should be atleast 8 characters"
-                      : null,
-                  label: "Password",
-                  isObscureText: true,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _register,
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        backgroundColor: Colors.deepPurple,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 25)),
-                    child: const Text(
-                      "Register",
-                      style: TextStyle(fontSize: 17),
-                    ),
+      appBar: AppBar(
+        title: Text(
+          "Register",
+          style: TextStyle(fontSize: 32),
+        ),
+        backgroundColor: Color.fromARGB(255, 26, 5, 62),
+        foregroundColor: Colors.white,
+        toolbarHeight: 100,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomTextField(
+                fieldController: fullNameController,
+                fieldValidator: (value) => value!.length < 4
+                    ? "Name should be atleast 4 characters"
+                    : null,
+                label: "Full Name",
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              CustomTextField(
+                  fieldController: emailController,
+                  fieldValidator: (value) => validateEmail(value!),
+                  label: "Email Address"),
+              const SizedBox(
+                height: 20,
+              ),
+              CustomTextField(
+                fieldController: passwordController,
+                fieldValidator: (value) => value!.length < 8
+                    ? "Password should be atleast 8 characters"
+                    : null,
+                label: "Password",
+                isPassword: isObscure,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isObscure = !isObscure;
+                    });
+                  },
+                  icon: Icon(
+                    isObscure ? Icons.visibility_off : Icons.visibility,
+                    color: Colors.black,
                   ),
                 ),
-                const Divider(height: 40),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 25)),
-                    child: const Text(
-                      "Register with Google",
-                      style: TextStyle(fontSize: 17),
-                    ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              CustomTextField(
+                fieldController: confirmPasswordController,
+                fieldValidator: (value) => validateConfirmPassword(value!),
+                label: "Confirm Password",
+                isPassword: isObscure,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isObscure = !isObscure;
+                    });
+                  },
+                  icon: Icon(
+                    isObscure ? Icons.visibility_off : Icons.visibility,
+                    color: Colors.black,
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Already have an account ?"),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/login");
-                      },
-                      child: const Text("Login"),
-                    )
-                  ],
-                )
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              AuthButton(onTap: _register, title: "Register", color: Colors.deepPurple),
+              const Divider(height: 40),
+              AuthButton(onTap: () {}, title: "Register with Google", color: Colors.redAccent),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Already have an account ?"),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/login");
+                    },
+                    child: const Text("Login"),
+                  )
+                ],
+              )
+            ],
           ),
         ),
       ),

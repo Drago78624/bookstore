@@ -1,3 +1,6 @@
+import 'package:bookstore/widgets/home/carousel.dart';
+import 'package:bookstore/widgets/home/latest_books.dart';
+import 'package:bookstore/widgets/home/popular_books.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -29,17 +32,18 @@ class _HomeState extends State<Home> {
               child: Text("Logout"))
         ],
       ),
-      body: Column(
-        children: [
-          Text("Popular"),
-        ],
-      ),
+      body: Column(children: [
+        Carousel(),
+        LatestBooks(),
+        PopularBooks(),
+      ]),
       bottomNavigationBar: BottomNavigationBar(items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: "Home",
         ),
-        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.category), label: "Categories"),
         // BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Wishlist"),
         // BottomNavigationBarItem(
         //     icon: Icon(Icons.account_circle), label: "User"),

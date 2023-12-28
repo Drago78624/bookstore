@@ -6,21 +6,26 @@ class CustomTextField extends StatelessWidget {
       required this.fieldController,
       required this.fieldValidator,
       required this.label,
-      this.isObscureText = false});
+      this.suffixIcon,
+      this.isPassword = false});
 
   final TextEditingController fieldController;
   final String label;
   final String? Function(String?)? fieldValidator;
-  final bool isObscureText;
+  final bool isPassword;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: fieldController,
-      obscureText: isObscureText,
+      obscureText: isPassword,
       decoration: InputDecoration(
         label: Text(label),
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        suffixIcon: suffixIcon,
       ),
       validator: fieldValidator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
