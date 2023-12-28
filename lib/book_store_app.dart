@@ -19,9 +19,7 @@ class BookStoreApp extends StatelessWidget {
       ),
       home: const CheckUserAuth(),
       routes: {
-        "/home": (context) => const Home(
-              title: "Homepage",
-            ),
+        "/home": (context) => const Home(),
         "/login": (context) => const Login(),
         "/register": (context) => const Register(),
         "/forgot-password": (context) => const ForgotPassword(),

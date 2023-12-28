@@ -19,7 +19,7 @@ class _CheckUserAuthState extends State<CheckUserAuth> {
   checkUserAuth() {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      return const Home(title: "homepage");
+      return const Home();
     } else {
       return const Login();
     }

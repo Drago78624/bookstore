@@ -27,13 +27,11 @@ class _RegisterState extends State<Register> {
       UserCredential? userCredential;
       try {
         userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password)
-            .then((value) {
-          return Navigator.pushNamed(
-            context,
-            "/home",
-          );
-        });
+            .createUserWithEmailAndPassword(email: email, password: password);
+        Navigator.pushNamed(
+          context,
+          "/home",
+        );
       } on FirebaseAuthException catch (ex) {
         showDialog(
           context: context,

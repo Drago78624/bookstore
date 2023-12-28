@@ -55,13 +55,11 @@ class _LoginState extends State<Login> {
       UserCredential? userCredential;
       try {
         userCredential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: email, password: password)
-            .then((value) {
-          return Navigator.pushNamed(
-            context,
-            "/home",
-          );
-        });
+            .signInWithEmailAndPassword(email: email, password: password);
+        Navigator.pushReplacementNamed(
+          context,
+          "/home",
+        );
       } on FirebaseAuthException catch (ex) {
         print(ex.code);
         String errorText = "";
