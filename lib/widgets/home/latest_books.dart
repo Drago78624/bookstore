@@ -1,8 +1,12 @@
+import 'package:bookstore/models/book.dart';
+import 'package:bookstore/models/latest_book.dart';
 import 'package:bookstore/widgets/book_card.dart';
 import 'package:bookstore/widgets/custom_heading.dart';
 import 'package:bookstore/widgets/see_all_btn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+final db = FirebaseFirestore.instance;
 
 class LatestBooks extends StatefulWidget {
   const LatestBooks({super.key, required this.onTap});
@@ -14,17 +18,33 @@ class LatestBooks extends StatefulWidget {
 }
 
 class _LatestBooksState extends State<LatestBooks> {
-  final db = FirebaseFirestore.instance;
-  getBooks() async {
+  final List<LatestBook> latestBooks = [];
+
+  getLatestBooks() async {
     db.collection("books").get().then(
       (querySnapshot) {
         print("Successfully completed");
         for (var docSnapshot in querySnapshot.docs) {
-          print('${docSnapshot.id} => ${docSnapshot.data()}');
+          final data = docSnapshot.data();
+          print(data["genre"].runtimeType);
+          latestBooks.add(
+            LatestBook(
+              id: docSnapshot.id,
+              title: data["title"],
+              price: data["price"],
+            ),
+          );
         }
+        setState(() {});
       },
       onError: (e) => print("Error completing: $e"),
     );
+  }
+
+  @override
+  void initState() {
+    getLatestBooks();
+    super.initState();
   }
 
   @override

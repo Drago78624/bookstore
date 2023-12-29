@@ -1,5 +1,6 @@
 import 'package:bookstore/helpers/validate_email.dart';
 import 'package:bookstore/screens/login_screen.dart';
+import 'package:bookstore/widgets/auth/auth_button.dart';
 import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Forgot Password"),
+        title: const Text(
+          "Forgot Password",
+          style: TextStyle(fontSize: 32),
+        ),
+        toolbarHeight: 100,
       ),
       body: Center(
         child: Padding(
@@ -73,22 +78,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 const SizedBox(
                   height: 20,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _resetPassword,
-                    child: const Text(
-                      "Reset Password",
-                      style: TextStyle(fontSize: 17),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        backgroundColor: Colors.deepPurple,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 25)),
-                  ),
-                ),
+                AuthButton(
+                  onTap: _resetPassword,
+                  title: "Reset Password",
+                  color: Colors.deepPurple,
+                )
               ],
             ),
           ),

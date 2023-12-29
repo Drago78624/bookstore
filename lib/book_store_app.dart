@@ -17,6 +17,10 @@ class BookStoreApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Book Store',
       theme: ThemeData(
+        appBarTheme: AppBarTheme().copyWith(
+          backgroundColor: Color.fromARGB(255, 26, 5, 62),
+          foregroundColor: Colors.white,
+        ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),

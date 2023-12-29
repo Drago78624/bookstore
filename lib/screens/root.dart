@@ -66,6 +66,7 @@ class _RootState extends State<Root> {
         actions: [
           if (!checkUserAuth())
             TextButton(
+              style: TextButton.styleFrom(foregroundColor: Colors.white),
               onPressed: () {
                 Navigator.pushNamed(context, "/login");
               },

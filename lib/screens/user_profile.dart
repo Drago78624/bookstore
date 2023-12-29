@@ -1,7 +1,11 @@
 import 'package:bookstore/models/user.dart';
+import 'package:bookstore/screens/addresses.dart';
+import 'package:bookstore/screens/wishlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+final db = FirebaseFirestore.instance;
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key, required this.userId});
@@ -14,9 +18,10 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   UserModel? userData;
+  List<dynamic> addresses = [];
+  String? addressId;
 
   getUser() async {
-    final db = FirebaseFirestore.instance;
     db.collection("users").where("uid", isEqualTo: widget.userId).get().then(
       (querySnapshot) {
         print("Successfully completed");
@@ -36,9 +41,30 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
+  getAddresses() {
+    db
+        .collection("addresses")
+        .where("uid", isEqualTo: widget.userId)
+        .get()
+        .then(
+      (querySnapshot) {
+        print("Successfully completed");
+        for (var docSnapshot in querySnapshot.docs) {
+          final data = docSnapshot.data();
+          setState(() {
+            addresses = data["addresses"];
+            addressId = docSnapshot.id;
+          });
+        }
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+  }
+
   @override
   void initState() {
     getUser();
+    getAddresses();
     super.initState();
   }
 
@@ -73,11 +99,20 @@ class _UserProfileState extends State<UserProfile> {
               child: Column(
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Wishlist(
+                            userId: userData!.userId,
+                          ),
+                        ),
+                      );
+                    },
                     child: const Row(
                       children: [
                         Text(
-                          "Favourites",
+                          "Wishlist",
                           style: TextStyle(
                             fontSize: 18,
                           ),
@@ -105,7 +140,16 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                   const Divider(),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Addresses(
+                              addresses: addresses,
+                              addressId: addressId!,
+                            ),
+                          ));
+                    },
                     child: const Row(
                       children: [
                         Text(

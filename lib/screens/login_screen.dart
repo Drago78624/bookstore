@@ -20,6 +20,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool loading = false;
   bool isObscure = true;
 
   loginWithGoogle() async {
@@ -52,12 +53,18 @@ class _LoginState extends State<Login> {
 
   void _login() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        loading = true;
+      });
       final email = emailController.text.toString();
       final password = passwordController.text.toString();
       UserCredential? userCredential;
       try {
         userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
+        setState(() {
+          loading = false;
+        });
         Navigator.pushReplacementNamed(
           context,
           "/root",
@@ -70,6 +77,9 @@ class _LoginState extends State<Login> {
         } else if (ex.code == 'wrong-password') {
           errorText = 'Wrong password provided for that user.';
         }
+        setState(() {
+          loading = false;
+        });
         showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
@@ -91,6 +101,11 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    if (loading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
