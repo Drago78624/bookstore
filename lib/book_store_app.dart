@@ -1,4 +1,5 @@
 import 'package:bookstore/auth/forgot_password.dart';
+import 'package:bookstore/screens/book_details.dart';
 import 'package:bookstore/screens/cart.dart';
 import 'package:bookstore/screens/home_screen.dart';
 import 'package:bookstore/screens/login_screen.dart';

@@ -42,14 +42,14 @@ class _LatestBooksState extends State<LatestBooks> {
             ],
           ),
         ),
-        Expanded(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [1, 2, 3, 4, 5].map((book) => BookCard()).toList(),
-            ),
-          ),
-        ),
+        // Expanded(
+        //   child: SingleChildScrollView(
+        //     scrollDirection: Axis.horizontal,
+        //     child: Row(
+        //       children: [1, 2, 3, 4, 5].map((book) => BookCard()).toList(),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

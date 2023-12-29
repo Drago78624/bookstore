@@ -22,8 +22,8 @@ class _HomeState extends State<Home> {
         crossAxisCount: 1,
         children: [
           Carousel(),
-          LatestBooks(onTap: widget.onTap),
-          PopularBooks(onTap: widget.onTap),
+          // LatestBooks(onTap: widget.onTap),
+          // PopularBooks(onTap: widget.onTap),
         ],
       ),
     );

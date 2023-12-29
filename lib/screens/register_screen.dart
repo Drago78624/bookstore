@@ -47,6 +47,7 @@ class _RegisterState extends State<Register> {
         userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
         final userData = await db.collection("users").add({
+          "uid": userCredential.user!.uid,
           "fullName": fullName,
           "email": email,
           "password": password,

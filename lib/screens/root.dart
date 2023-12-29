@@ -1,6 +1,4 @@
 import 'package:bookstore/helpers/check_auth_user.dart';
-import 'package:bookstore/screens/cart.dart';
-import 'package:bookstore/screens/categories.dart';
 import 'package:bookstore/screens/home_screen.dart';
 import 'package:bookstore/screens/shop.dart';
 import 'package:bookstore/screens/user_profile.dart';
@@ -16,6 +14,16 @@ class Root extends StatefulWidget {
 
 class _RootState extends State<Root> {
   int _selectedIndex = 0;
+  String? userId;
+
+  @override
+  void initState() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      userId = FirebaseAuth.instance.currentUser!.uid;
+    }
+    super.initState();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,7 +52,7 @@ class _RootState extends State<Root> {
     final List<Widget> _widgetOptions = [
       Home(onTap: _onItemTapped),
       Shop(),
-      if (checkUserAuth()) UserProfile()
+      if (checkUserAuth()) UserProfile(userId: userId!)
     ];
 
     return Scaffold(
@@ -64,19 +72,12 @@ class _RootState extends State<Root> {
               child: Text("Login"),
             )
           else
-            TextButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-                setState(() {});
+            IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/cart");
               },
-              child: Text("logout"),
+              icon: Icon(Icons.shopping_cart),
             ),
-          // IconButton(
-          //   onPressed: () {
-          //     Navigator.pushNamed(context, "/cart");
-          //   },
-          //   icon: Icon(Icons.shopping_cart),
-          // ),
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),

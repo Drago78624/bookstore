@@ -1,4 +1,5 @@
 import 'package:bookstore/models/book.dart';
+import 'package:bookstore/screens/book_details.dart';
 import 'package:bookstore/widgets/book_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _ShopState extends State<Shop> {
           print(data["genre"].runtimeType);
           allBooks.add(
             Book(
+              id: docSnapshot.id,
               title: data["title"],
               author: data["author"],
               genre: data["genre"],
@@ -54,10 +56,22 @@ class _ShopState extends State<Shop> {
         crossAxisCount: 2,
         mainAxisSpacing: 15,
         children: allBooks
-            .map((book) => BookCard(
-                title: book.title,
-                coverImageUrl: book.coverImageUrl,
-                price: book.price))
+            .map(
+              (book) => TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookDetails(bookId: book.id),
+                      ));
+                },
+                child: BookCard(
+                  title: book.title,
+                  coverImageUrl: book.coverImageUrl,
+                  price: book.price,
+                ),
+              ),
+            )
             .toList(),
       ),
     );

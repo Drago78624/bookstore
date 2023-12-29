@@ -2,6 +2,7 @@
 class Book {
   Book({
     required this.title,
+    required this.id,
     required this.author,
     required this.genre,
     required this.description,
@@ -10,6 +11,7 @@ class Book {
     required this.rating,
   });
 
+  final String id;
   final String title;
   final String author;
   final List<dynamic> genre;
