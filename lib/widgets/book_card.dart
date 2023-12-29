@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
 class BookCard extends StatelessWidget {
-  const BookCard({super.key});
+  const BookCard(
+      {super.key,
+      required this.title,
+      required this.coverImageUrl,
+      required this.price});
+
+  final String title;
+  final String coverImageUrl;
+  final double price;
 
   @override
   Widget build(BuildContext context) {
@@ -9,23 +17,27 @@ class BookCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 10),
       width: 150, // Adjust as needed
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Use a Flexible widget to ensure height adjusts to image size
           Flexible(
-            child: Image.network(
-              "https://media.zenfs.com/en/ap.org/8a518c03ba576979ada6af7fce4855aa",
-              fit: BoxFit.cover,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                coverImageUrl,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(height: 10),
           Text(
-            "The hunger games",
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Text(
-            "\$19.99",
-            style: const TextStyle(fontSize: 16, color: Colors.grey),
+            "\$${price.toString()}",
+            style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
         ],
       ),

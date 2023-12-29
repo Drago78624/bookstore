@@ -21,7 +21,7 @@ class Carousel extends StatelessWidget {
         autoPlayInterval: Duration(seconds: 5),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
         viewportFraction: 1.0,
-        height: 180.0, // Adjust height as needed
+        // height: 180.0, // Adjust height as needed
       ),
     );
   }

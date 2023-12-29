@@ -20,6 +20,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isObscure = true;
 
   loginWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn(
@@ -41,7 +42,7 @@ class _LoginState extends State<Login> {
         return await FirebaseAuth.instance
             .signInWithCredential(credential)
             .then((value) {
-          return Navigator.pushNamed(context, "/home");
+          return Navigator.pushReplacementNamed(context, "/root");
         });
       }
     } catch (ex) {
@@ -59,7 +60,7 @@ class _LoginState extends State<Login> {
             .signInWithEmailAndPassword(email: email, password: password);
         Navigator.pushReplacementNamed(
           context,
-          "/home",
+          "/root",
         );
       } on FirebaseAuthException catch (ex) {
         print(ex.code);
@@ -120,7 +121,18 @@ class _LoginState extends State<Login> {
                     ? "Password should be atleast 8 characters"
                     : null,
                 label: "Password",
-                isPassword: true,
+                isPassword: isObscure,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isObscure = !isObscure;
+                    });
+                  },
+                  icon: Icon(
+                    isObscure ? Icons.visibility_off : Icons.visibility,
+                    color: Colors.black,
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 20,

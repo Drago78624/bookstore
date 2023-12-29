@@ -46,17 +46,17 @@ class _RegisterState extends State<Register> {
       try {
         userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
-        // final userData = await db.collection("users").add({
-        //   "fullName": fullName,
-        //   "email": email,
-        //   "password": password,
-        //   "addresses": [],
-        //   "paymentMethods": []
-        // }).then((documentSnapshot) =>
-        //     print("Added Data with ID: ${documentSnapshot.id}"));
+        final userData = await db.collection("users").add({
+          "fullName": fullName,
+          "email": email,
+          "password": password,
+          "addresses": [],
+          "paymentMethods": []
+        }).then((documentSnapshot) =>
+            print("Added Data with ID: ${documentSnapshot.id}"));
         Navigator.pushNamed(
           context,
-          "/home",
+          "/root",
         );
       } on FirebaseAuthException catch (ex) {
         showDialog(
@@ -156,9 +156,15 @@ class _RegisterState extends State<Register> {
               const SizedBox(
                 height: 20,
               ),
-              AuthButton(onTap: _register, title: "Register", color: Colors.deepPurple),
+              AuthButton(
+                  onTap: _register,
+                  title: "Register",
+                  color: Colors.deepPurple),
               const Divider(height: 40),
-              AuthButton(onTap: () {}, title: "Register with Google", color: Colors.redAccent),
+              AuthButton(
+                  onTap: () {},
+                  title: "Register with Google",
+                  color: Colors.redAccent),
               const SizedBox(
                 height: 20,
               ),
@@ -168,7 +174,7 @@ class _RegisterState extends State<Register> {
                   const Text("Already have an account ?"),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/login");
+                      Navigator.pop(context);
                     },
                     child: const Text("Login"),
                   )
