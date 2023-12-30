@@ -1,8 +1,6 @@
-import 'package:bookstore/screens/root.dart';
 import 'package:bookstore/widgets/home/carousel.dart';
 import 'package:bookstore/widgets/home/latest_books.dart';
 import 'package:bookstore/widgets/home/popular_books.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {

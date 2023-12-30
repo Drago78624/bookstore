@@ -1,5 +1,6 @@
 import 'package:bookstore/models/book.dart';
 import 'package:bookstore/models/latest_book.dart';
+import 'package:bookstore/screens/book_details.dart';
 import 'package:bookstore/widgets/book_card.dart';
 import 'package:bookstore/widgets/custom_heading.dart';
 import 'package:bookstore/widgets/see_all_btn.dart';
@@ -21,24 +22,23 @@ class _LatestBooksState extends State<LatestBooks> {
   final List<LatestBook> latestBooks = [];
 
   getLatestBooks() async {
-    db.collection("books").get().then(
+    await db.collection("books").limit(7).get().then(
       (querySnapshot) {
-        print("Successfully completed");
         for (var docSnapshot in querySnapshot.docs) {
           final data = docSnapshot.data();
-          print(data["genre"].runtimeType);
           latestBooks.add(
             LatestBook(
-              id: docSnapshot.id,
-              title: data["title"],
-              price: data["price"],
-            ),
+                title: data["title"],
+                id: docSnapshot.id,
+                price: data["price"],
+                coverImageUrl: data["thumbnailUrl"] ??
+                    "https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg"),
           );
         }
-        setState(() {});
       },
       onError: (e) => print("Error completing: $e"),
     );
+    setState(() {});
   }
 
   @override
@@ -62,14 +62,31 @@ class _LatestBooksState extends State<LatestBooks> {
             ],
           ),
         ),
-        // Expanded(
-        //   child: SingleChildScrollView(
-        //     scrollDirection: Axis.horizontal,
-        //     child: Row(
-        //       children: [1, 2, 3, 4, 5].map((book) => BookCard()).toList(),
-        //     ),
-        //   ),
-        // ),
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: latestBooks
+                  .map((latestBook) => TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BookDetails(bookId: latestBook.id),
+                            ),
+                          );
+                        },
+                        child: BookCard(
+                            title: latestBook.title.replaceRange(
+                                11, latestBook.title.length, '...'),
+                            coverImageUrl: latestBook.coverImageUrl!,
+                            price: latestBook.price),
+                      ))
+                  .toList(),
+            ),
+          ),
+        ),
       ],
     );
   }

@@ -17,29 +17,28 @@ class _ShopState extends State<Shop> {
   final List<Book> allBooks = [];
 
   getAllBooks() async {
-    db.collection("books").get().then(
+    await db.collection("books").get().then(
       (querySnapshot) {
-        print("Successfully completed");
         for (var docSnapshot in querySnapshot.docs) {
           final data = docSnapshot.data();
-          print(data["genre"].runtimeType);
           allBooks.add(
             Book(
               id: docSnapshot.id,
               title: data["title"],
-              author: data["author"],
-              genre: data["genre"],
-              description: data["description"],
-              coverImageUrl: data["coverImageUrl"],
+              author: data["authors"],
+              genre: data["categories"],
+              description: data["longDescription"] ?? "no description",
+              coverImageUrl: data["thumbnailUrl"] ??
+                  "https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg",
               price: data["price"],
-              rating: data["rating"],
+              // rating: data["rating"],
             ),
           );
         }
-        setState(() {});
       },
       onError: (e) => print("Error completing: $e"),
     );
+    setState(() {});
   }
 
   @override
@@ -66,7 +65,7 @@ class _ShopState extends State<Shop> {
                       ));
                 },
                 child: BookCard(
-                  title: book.title,
+                  title: book.title.replaceRange(11, book.title.length, '...'),
                   coverImageUrl: book.coverImageUrl,
                   price: book.price,
                 ),

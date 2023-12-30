@@ -8,15 +8,15 @@ class Book {
     required this.description,
     required this.coverImageUrl,
     required this.price,
-    required this.rating,
+    // required this.rating,
   });
 
   final String id;
   final String title;
-  final String author;
+  final List<dynamic> author;
   final List<dynamic> genre;
-  final String description;
+  final String? description;
   final String coverImageUrl;
   final double price;
-  final int rating;
+  // final int rating;
 }

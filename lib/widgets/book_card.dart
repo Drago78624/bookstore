@@ -24,7 +24,8 @@ class BookCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
-                coverImageUrl,
+                'https://cors-anywhere.herokuapp.com/' + coverImageUrl,
+                height: 150,
                 fit: BoxFit.cover,
               ),
             ),

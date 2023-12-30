@@ -53,12 +53,14 @@ class _RegisterState extends State<Register> {
           "password": password,
           "addresses": [],
           "paymentMethods": []
-        }).then((documentSnapshot) =>
-            print("Added Data with ID: ${documentSnapshot.id}"));
-        Navigator.pushNamed(
-          context,
-          "/root",
+        }).then(
+          (documentSnapshot) =>
+              print("Added Data with ID: ${documentSnapshot.id}"),
         );
+        final addressData = await db
+            .collection("addresses")
+            .add({"uid": userCredential.user!.uid, "addresses": []});
+        Navigator.pushReplacementNamed(context, "/root");
       } on FirebaseAuthException catch (ex) {
         showDialog(
           context: context,
