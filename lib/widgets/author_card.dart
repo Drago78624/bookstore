@@ -1,15 +1,15 @@
 import 'package:bookstore/screens/root.dart';
 import 'package:flutter/material.dart';
 
-class CategoryCard extends StatelessWidget {
-  const CategoryCard(
+class AuthorCard extends StatelessWidget {
+  const AuthorCard(
       {super.key,
-      required this.categoryName,
+      required this.authorName,
       required this.onTap,
       required this.setFilter});
 
   final void Function(BookFilter? enteredFilter, String? enteredName) setFilter;
-  final String categoryName;
+  final String authorName;
   final void Function(int index) onTap;
 
   @override
@@ -17,14 +17,14 @@ class CategoryCard extends StatelessWidget {
     return Card(
       child: TextButton(
         onPressed: () {
-          setFilter(BookFilter.category, categoryName);
+          setFilter(BookFilter.author, authorName);
           onTap(3);
         },
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              categoryName,
+              authorName,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 18),
             ),

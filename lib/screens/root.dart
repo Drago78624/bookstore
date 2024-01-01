@@ -1,4 +1,5 @@
 import 'package:bookstore/helpers/check_auth_user.dart';
+import 'package:bookstore/screens/authors.dart';
 import 'package:bookstore/screens/categories.dart';
 import 'package:bookstore/screens/home_screen.dart';
 import 'package:bookstore/screens/shop.dart';
@@ -55,6 +56,10 @@ class _RootState extends State<Root> {
         label: 'Categories',
       ),
       const BottomNavigationBarItem(
+        icon: Icon(Icons.group),
+        label: 'Authors',
+      ),
+      const BottomNavigationBarItem(
         icon: Icon(Icons.shopping_bag),
         label: 'Shop',
       ),
@@ -68,6 +73,7 @@ class _RootState extends State<Root> {
     final List<Widget> _widgetOptions = [
       Home(onTap: _onItemTapped),
       Categories(onTap: _onItemTapped, setFilter: setFilter),
+      Authors(onTap: _onItemTapped, setFilter: setFilter),
       Shop(filter: filter, filterName: name),
       if (checkUserAuth()) UserProfile(userId: userId!)
     ];

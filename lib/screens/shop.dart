@@ -27,6 +27,7 @@ class _ShopState extends State<Shop> {
     if (widget.filter == BookFilter.category) {
       query = collection.where("categories", arrayContains: widget.filterName);
     } else if (widget.filter == BookFilter.author) {
+      query = collection.where("authors", arrayContains: widget.filterName);
     } else {
       query = collection;
     }
