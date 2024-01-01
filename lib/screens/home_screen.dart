@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
       body: GridView.count(
         crossAxisCount: 1,
         children: [
-          Carousel(),
+          const Carousel(),
           LatestBooks(onTap: widget.onTap),
           PopularBooks(onTap: widget.onTap),
         ],

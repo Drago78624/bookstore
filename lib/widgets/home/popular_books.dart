@@ -1,4 +1,4 @@
-import 'package:bookstore/models/latest_book.dart';
+import 'package:bookstore/models/book_card_model.dart';
 import 'package:bookstore/screens/book_details.dart';
 import 'package:bookstore/widgets/book_card.dart';
 import 'package:bookstore/widgets/custom_heading.dart';
@@ -16,7 +16,7 @@ class PopularBooks extends StatefulWidget {
 }
 
 class _PopularBooksState extends State<PopularBooks> {
-  final List<LatestBook> popularBooks = [];
+  final List<BookCardModel> popularBooks = [];
 
   getPopularBooks() async {
     await db
@@ -29,7 +29,7 @@ class _PopularBooksState extends State<PopularBooks> {
         for (var docSnapshot in querySnapshot.docs) {
           final data = docSnapshot.data();
           popularBooks.add(
-            LatestBook(
+            BookCardModel(
                 title: data["title"],
                 id: docSnapshot.id,
                 price: data["price"],

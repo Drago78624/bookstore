@@ -1,9 +1,12 @@
 import 'package:bookstore/helpers/check_auth_user.dart';
+import 'package:bookstore/screens/categories.dart';
 import 'package:bookstore/screens/home_screen.dart';
 import 'package:bookstore/screens/shop.dart';
 import 'package:bookstore/screens/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+enum BookFilter { category, author }
 
 class Root extends StatefulWidget {
   const Root({super.key});
@@ -15,6 +18,8 @@ class Root extends StatefulWidget {
 class _RootState extends State<Root> {
   int _selectedIndex = 0;
   String? userId;
+  BookFilter? filter;
+  String? name;
 
   @override
   void initState() {
@@ -31,12 +36,23 @@ class _RootState extends State<Root> {
     });
   }
 
+  void setFilter(BookFilter? enteredFilter, String? enteredName) {
+    setState(() {
+      filter = enteredFilter;
+      name = enteredName;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<BottomNavigationBarItem> bottomNavItems = [
       const BottomNavigationBarItem(
         icon: Icon(Icons.home),
         label: 'Home',
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.category),
+        label: 'Categories',
       ),
       const BottomNavigationBarItem(
         icon: Icon(Icons.shopping_bag),
@@ -51,7 +67,8 @@ class _RootState extends State<Root> {
 
     final List<Widget> _widgetOptions = [
       Home(onTap: _onItemTapped),
-      Shop(),
+      Categories(onTap: _onItemTapped, setFilter: setFilter),
+      Shop(filter: filter, filterName: name),
       if (checkUserAuth()) UserProfile(userId: userId!)
     ];
 

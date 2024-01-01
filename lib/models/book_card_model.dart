@@ -1,5 +1,5 @@
-class LatestBook {
-  LatestBook({
+class BookCardModel {
+  BookCardModel({
     required this.title,
     required this.id,
     required this.price,

@@ -1,4 +1,4 @@
-import 'package:bookstore/models/latest_book.dart';
+import 'package:bookstore/models/book_card_model.dart';
 import 'package:bookstore/screens/book_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +16,7 @@ class Wishlist extends StatefulWidget {
 }
 
 class _WishlistState extends State<Wishlist> {
-  final List<LatestBook> wishlist = [];
+  final List<BookCardModel> wishlist = [];
 
   getWishlistBooks() async {
     await db
@@ -28,7 +28,7 @@ class _WishlistState extends State<Wishlist> {
         for (var docSnapshot in querySnapshot.docs) {
           final data = docSnapshot.data();
           wishlist.add(
-            LatestBook(
+            BookCardModel(
                 docId: docSnapshot.id,
                 title: data["title"],
                 id: data["bookId"],

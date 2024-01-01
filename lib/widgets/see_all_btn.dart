@@ -9,7 +9,7 @@ class SeeAllBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        onTap(1);
+        onTap(2);
       },
       child: Text(
         "See all",

@@ -1,5 +1,5 @@
 import 'package:bookstore/models/book.dart';
-import 'package:bookstore/models/latest_book.dart';
+import 'package:bookstore/models/book_card_model.dart';
 import 'package:bookstore/screens/book_details.dart';
 import 'package:bookstore/widgets/book_card.dart';
 import 'package:bookstore/widgets/custom_heading.dart';
@@ -19,7 +19,7 @@ class LatestBooks extends StatefulWidget {
 }
 
 class _LatestBooksState extends State<LatestBooks> {
-  final List<LatestBook> latestBooks = [];
+  final List<BookCardModel> latestBooks = [];
 
   getLatestBooks() async {
     await db.collection("books").limit(7).get().then(
@@ -27,7 +27,7 @@ class _LatestBooksState extends State<LatestBooks> {
         for (var docSnapshot in querySnapshot.docs) {
           final data = docSnapshot.data();
           latestBooks.add(
-            LatestBook(
+            BookCardModel(
                 title: data["title"],
                 id: docSnapshot.id,
                 price: data["price"],
@@ -56,8 +56,8 @@ class _LatestBooksState extends State<LatestBooks> {
           padding: const EdgeInsets.all(10.0),
           child: Row(
             children: [
-              CustomHeading("Latest Books"),
-              Spacer(),
+              const CustomHeading("Latest Books"),
+              const Spacer(),
               SeeAllBtn(onTap: widget.onTap),
             ],
           ),

@@ -19,7 +19,6 @@ class BookCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Use a Flexible widget to ensure height adjusts to image size
           Flexible(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
