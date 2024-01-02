@@ -3,14 +3,10 @@ import 'package:flutter/material.dart';
 
 class AuthorCard extends StatelessWidget {
   const AuthorCard(
-      {super.key,
-      required this.authorName,
-      required this.onTap,
-      required this.setFilter});
+      {super.key, required this.authorName, required this.setFilter});
 
   final void Function(BookFilter? enteredFilter, String? enteredName) setFilter;
   final String authorName;
-  final void Function(int index) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +14,6 @@ class AuthorCard extends StatelessWidget {
       child: TextButton(
         onPressed: () {
           setFilter(BookFilter.author, authorName);
-          onTap(3);
         },
         child: Center(
           child: Padding(

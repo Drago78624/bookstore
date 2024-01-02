@@ -3,11 +3,43 @@ import 'package:bookstore/widgets/author_card.dart';
 import 'package:bookstore/widgets/category_card.dart';
 import 'package:flutter/material.dart';
 
+const authorsAvailable = [
+  "W. Frank Ableson",
+  "Charlie Collins",
+  "Robi Sen",
+  "Gojko Adzic",
+  "Tariq Ahmed with Jon Hirschi",
+  "Faisal Abid",
+  "Tariq Ahmed",
+  "Dan Orlando",
+  "John C. Bland II",
+  "Joel Hooks",
+  "Satnam Alag",
+  "Rob Allen",
+  "Nick Lo",
+  "Steven Brown",
+  "Bernerd Allmon",
+  "Jeremy Anderson",
+  "Andres Almiray",
+  "Danno Ferrin",
+  "James Shingler",
+  "Alexandre de Castro Alves",
+  "Peter Armstrong",
+  "Levi Asher",
+  "Christian Crumlish",
+  "Jamil Azher",
+  "Kyle Baley",
+  "Donald Belcham",
+  "Kyle Banker",
+  "Michael J. Barlotta",
+  "Michael Barlotta",
+  "Jason R. Weiss"
+];
+
 class Authors extends StatelessWidget {
-  const Authors({super.key, required this.onTap, required this.setFilter});
+  const Authors({super.key, required this.setFilter});
 
   final void Function(BookFilter? enteredFilter, String? enteredName) setFilter;
-  final void Function(int index) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +47,9 @@ class Authors extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: GridView.count(
         crossAxisCount: 2,
-        children:
-            ["Rob Allen", "Danno Ferrin", "Michael J. Barlotta"].map((author) {
+        children: authorsAvailable.map((author) {
           return AuthorCard(
-              authorName: author, onTap: onTap, setFilter: setFilter);
+              authorName: author, setFilter: setFilter);
         }).toList(),
       ),
     );

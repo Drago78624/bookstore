@@ -87,7 +87,7 @@ class _BookDetailsState extends State<BookDetails> {
                       height: 10,
                     ),
                     Text(
-                      bookData["authors"][0],
+                      bookData["authors"].join(", "),
                       style: TextStyle(fontSize: 18),
                     ),
                     SizedBox(

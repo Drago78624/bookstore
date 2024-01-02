@@ -5,12 +5,10 @@ class CategoryCard extends StatelessWidget {
   const CategoryCard(
       {super.key,
       required this.categoryName,
-      required this.onTap,
       required this.setFilter});
 
   final void Function(BookFilter? enteredFilter, String? enteredName) setFilter;
   final String categoryName;
-  final void Function(int index) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +16,6 @@ class CategoryCard extends StatelessWidget {
       child: TextButton(
         onPressed: () {
           setFilter(BookFilter.category, categoryName);
-          onTap(3);
         },
         child: Center(
           child: Padding(

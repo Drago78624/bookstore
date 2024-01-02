@@ -2,6 +2,7 @@ import 'package:bookstore/helpers/check_auth_user.dart';
 import 'package:bookstore/screens/authors.dart';
 import 'package:bookstore/screens/categories.dart';
 import 'package:bookstore/screens/home_screen.dart';
+import 'package:bookstore/screens/results.dart';
 import 'package:bookstore/screens/shop.dart';
 import 'package:bookstore/screens/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,6 +43,11 @@ class _RootState extends State<Root> {
       filter = enteredFilter;
       name = enteredName;
     });
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Results(filter: filter, filterName: name),
+        ));
   }
 
   @override
@@ -72,9 +78,9 @@ class _RootState extends State<Root> {
 
     final List<Widget> _widgetOptions = [
       Home(onTap: _onItemTapped),
-      Categories(onTap: _onItemTapped, setFilter: setFilter),
-      Authors(onTap: _onItemTapped, setFilter: setFilter),
-      Shop(filter: filter, filterName: name),
+      Categories(setFilter: setFilter),
+      Authors(setFilter: setFilter),
+      Shop(),
       if (checkUserAuth()) UserProfile(userId: userId!)
     ];
 
