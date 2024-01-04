@@ -12,7 +12,7 @@ class AddressCard extends StatelessWidget {
     final addressRef =
         FirebaseFirestore.instance.collection("addresses").doc(addressId);
 
-    addressRef.update({
+    await addressRef.update({
       "addresses": FieldValue.arrayRemove([addressData]),
     });
   }

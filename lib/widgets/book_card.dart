@@ -11,6 +11,8 @@ class BookCard extends StatelessWidget {
   final String coverImageUrl;
   final double price;
 
+  // 'https://cors-anywhere.herokuapp.com/' +
+
   @override
   Widget build(BuildContext context) {
     return Container(

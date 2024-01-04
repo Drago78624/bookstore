@@ -38,7 +38,9 @@ class _AddressesState extends State<Addresses> {
                 ]
               : widget.addresses.map((address) {
                   return AddressCard(
-                      addressData: address, addressId: widget.addressId);
+                    addressData: address,
+                    addressId: widget.addressId,
+                  );
                 }).toList(),
         ),
       ),

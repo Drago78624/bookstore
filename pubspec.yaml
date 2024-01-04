@@ -43,6 +43,7 @@ dependencies:
   readmore: ^2.2.0
   flutter_rating_bar: ^4.0.1
   string_capitalize: ^0.0.10
+  filter_list: ^1.0.2
 
 dev_dependencies:
   flutter_test:

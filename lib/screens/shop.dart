@@ -1,3 +1,4 @@
+import 'package:bookstore/models/book.dart';
 import 'package:bookstore/models/book_card_model.dart';
 import 'package:bookstore/screens/book_details.dart';
 import 'package:bookstore/screens/root.dart';
@@ -6,6 +7,9 @@ import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:string_capitalize/string_capitalize.dart';
+import 'package:filter_list/filter_list.dart';
+
+final _formKey = GlobalKey<FormState>();
 
 final db = FirebaseFirestore.instance;
 
@@ -17,54 +21,81 @@ class Shop extends StatefulWidget {
 }
 
 class _ShopState extends State<Shop> {
-  final List<BookCardModel> allBooks = [];
-  Query<Map<String, dynamic>>? query;
+  List allBooks = [];
+  List filteredBooks = [];
   final TextEditingController searchController = TextEditingController();
 
   final collection = db.collection("books");
 
   getAllBooks() async {
-    await collection.get().then(
-      (querySnapshot) {
-        for (var docSnapshot in querySnapshot.docs) {
-          final data = docSnapshot.data();
-          allBooks.add(
-            BookCardModel(
-              id: docSnapshot.id,
-              title: data["title"],
-              coverImageUrl: data["thumbnailUrl"] ??
-                  "https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg",
-              price: data["price"],
-            ),
-          );
-        }
-      },
-      onError: (e) => print("Error completing: $e"),
-    );
-    setState(() {});
+    var data = await collection.get();
+    // .then(
+    //   (querySnapshot) {
+    //     for (var docSnapshot in querySnapshot.docs) {
+    //       final data = docSnapshot.data();
+    //       allBooks.add(
+    //         BookCardModel(
+    //           id: docSnapshot.id,
+    //           title: data["title"],
+    //           coverImageUrl: data["thumbnailUrl"] ??
+    //               "https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg",
+    //           price: data["price"],
+    //         ),
+    //       );
+    //     }
+    //   },
+    //   onError: (e) => print("Error completing: $e"),
+    // );
+    setState(() {
+      allBooks = data.docs;
+    });
+
+    searchResultBooks();
   }
 
   @override
   void initState() {
     getAllBooks();
+    searchController.addListener(onUserSearch);
     super.initState();
   }
 
-  Future<void> searchDocuments(String query) async {
-    final collectionRef = FirebaseFirestore.instance.collection('books');
+  onUserSearch() {
+    searchResultBooks();
+  }
 
-    final userInput = searchController.text.capitalize();
+  searchResultBooks() {
+    List results = [];
+    if (_formKey.currentState!.validate()) {
+      for (var book in allBooks) {
+        String title = book["title"].toString().toLowerCase();
+        String categories = book["categories"];
+        String authors = book["authors"];
 
-    final query1 = collectionRef.where('categories', arrayContains: userInput);
-    final query2 = collectionRef.where('authors', arrayContains: userInput);
-    final query3 = collectionRef.where('title', arrayContains: userInput);
+        if (title.contains(searchController.text.toLowerCase())) {
+          results.add(book);
+        }
+      }
+    } else {
+      results = List.from(allBooks);
+    }
 
-    final results =
-        await Future.wait([query1.get(), query2.get(), query3.get()]);
-    final combinedResults =
-        results.expand((snapshot) => snapshot.docs).toList();
+    setState(() {
+      filteredBooks = results;
+    });
+  }
 
-    print(combinedResults);
+  @override
+  void dispose() {
+    searchController.removeListener(onUserSearch);
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    getAllBooks();
+    super.didChangeDependencies();
   }
 
   @override
@@ -74,6 +105,7 @@ class _ShopState extends State<Shop> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
+            key: _formKey,
             child: Column(
               children: [
                 CustomTextField(
@@ -83,7 +115,7 @@ class _ShopState extends State<Shop> {
                       : null,
                   label: "Search",
                   hint: "Book, Author, Genre ",
-                  onChanged: (value) => searchDocuments(value),
+                  // onChanged: (value) => searchDocuments(value),
                 ),
                 SizedBox(
                   height: 10,
@@ -105,7 +137,7 @@ class _ShopState extends State<Shop> {
             child: GridView.count(
               crossAxisCount: 2,
               mainAxisSpacing: 15,
-              children: allBooks
+              children: filteredBooks
                   .map(
                     (book) => TextButton(
                       onPressed: () {
@@ -117,10 +149,11 @@ class _ShopState extends State<Shop> {
                             ));
                       },
                       child: BookCard(
-                        title: book.title
-                            .replaceRange(11, book.title.length, '...'),
-                        coverImageUrl: book.coverImageUrl!,
-                        price: book.price,
+                        title: book["title"]
+                            .replaceRange(11, book["title"].length, '...'),
+                        coverImageUrl: book["thumbnailUrl"] ??
+                            "https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg",
+                        price: book["price"],
                       ),
                     ),
                   )

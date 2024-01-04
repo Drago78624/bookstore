@@ -18,7 +18,7 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   UserModel? userData;
-  List<dynamic> addresses = [];
+  List<dynamic> userAddresses = [];
   String? addressId;
 
   getUser() async {
@@ -42,18 +42,35 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   getAddresses() {
+    // db
+    //     .collection("addresses")
+    //     .where("uid", isEqualTo: widget.userId)
+    //     .get()
+    //     .then(
+    //   (querySnapshot) {
+    //     print("Successfully completed");
+    //     for (var docSnapshot in querySnapshot.docs) {
+    //       final data = docSnapshot.data();
+    //       setState(() {
+    //         addresses = data["addresses"];
+    //         addressId = docSnapshot.id;
+    //       });
+    //     }
+    //   },
     db
         .collection("addresses")
         .where("uid", isEqualTo: widget.userId)
-        .get()
-        .then(
-      (querySnapshot) {
-        print("Successfully completed");
-        for (var docSnapshot in querySnapshot.docs) {
-          final data = docSnapshot.data();
+        .snapshots()
+        .listen(
+      (event) {
+        for (var doc in event.docs) {
+          final data = doc.data();
+          final addresses = data["addresses"];
+          for (var address in addresses) {
+            userAddresses.add(address);
+          }
           setState(() {
-            addresses = data["addresses"];
-            addressId = docSnapshot.id;
+            addressId = doc.id;
           });
         }
       },
@@ -145,7 +162,7 @@ class _UserProfileState extends State<UserProfile> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => Addresses(
-                              addresses: addresses,
+                              addresses: userAddresses,
                               addressId: addressId!,
                             ),
                           ));
