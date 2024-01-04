@@ -13,6 +13,8 @@ final _formKey = GlobalKey<FormState>();
 
 final db = FirebaseFirestore.instance;
 
+enum SortFilter { price, popularity, releaseDate }
+
 class Shop extends StatefulWidget {
   const Shop({super.key});
 
@@ -22,40 +24,25 @@ class Shop extends StatefulWidget {
 
 class _ShopState extends State<Shop> {
   List allBooks = [];
-  List filteredBooks = [];
   final TextEditingController searchController = TextEditingController();
+  List filteredBooks = [];
+  SortFilter sortFilter = SortFilter.popularity;
+  bool loading = false;
 
   final collection = db.collection("books");
 
   getAllBooks() async {
+    loading = true;
     var data = await collection.get();
-    // .then(
-    //   (querySnapshot) {
-    //     for (var docSnapshot in querySnapshot.docs) {
-    //       final data = docSnapshot.data();
-    //       allBooks.add(
-    //         BookCardModel(
-    //           id: docSnapshot.id,
-    //           title: data["title"],
-    //           coverImageUrl: data["thumbnailUrl"] ??
-    //               "https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg",
-    //           price: data["price"],
-    //         ),
-    //       );
-    //     }
-    //   },
-    //   onError: (e) => print("Error completing: $e"),
-    // );
     setState(() {
       allBooks = data.docs;
     });
-
+    loading = false;
     searchResultBooks();
   }
 
   @override
   void initState() {
-    getAllBooks();
     searchController.addListener(onUserSearch);
     super.initState();
   }
@@ -69,25 +56,17 @@ class _ShopState extends State<Shop> {
     if (_formKey.currentState!.validate()) {
       for (var book in allBooks) {
         String title = book["title"].toString().toLowerCase();
-        List categories = book["categories"];
-        List authors = book["authors"];
+        List authors =
+            book["authors"].map((author) => author.toLowerCase()).toList();
+        List categories = book["categories"]
+            .map((category) => category.toLowerCase())
+            .toList();
+        String userInput = searchController.text.toLowerCase();
 
-        if (title.contains(searchController.text.toLowerCase())) {
+        if (title.contains(userInput) ||
+            authors.any((author) => author.contains(userInput)) ||
+            categories.any((category) => category.contains(userInput))) {
           results.add(book);
-        }
-        for (var category in categories) {
-          if (category
-              .toLowerCase()
-              .contains(searchController.text.toLowerCase())) {
-            results.add(book);
-          }
-        }
-        for (var author in authors) {
-          if (author
-              .toLowerCase()
-              .contains(searchController.text.toLowerCase())) {
-            results.add(book);
-          }
         }
       }
     } else {
@@ -131,49 +110,67 @@ class _ShopState extends State<Shop> {
                   hint: "Book, Author, Genre ",
                   // onChanged: (value) => searchDocuments(value),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Row(
-                  children: [
-                    TextButton(onPressed: () {}, child: Text("Sort")),
-                    Spacer(),
-                    ElevatedButton(onPressed: () {}, child: Text("Submit"))
-                  ],
+                DropdownButton(
+                  value: sortFilter,
+                  items: SortFilter.values
+                      .map(
+                        (category) => DropdownMenuItem(
+                          value: category,
+                          child: Text(
+                            category.name.toUpperCase(),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    if (value == null) {
+                      return;
+                    }
+                    setState(() {
+                      sortFilter = value;
+                    });
+                  },
                 ),
               ],
             ),
           ),
         ),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GridView.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 15,
-              children: filteredBooks
-                  .map(
-                    (book) => TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BookDetails(bookId: book.id),
-                            ));
-                      },
-                      child: BookCard(
-                        title: book["title"]
-                            .replaceRange(11, book["title"].length, '...'),
-                        coverImageUrl: book["thumbnailUrl"] ??
-                            "https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg",
-                        price: book["price"],
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
+          child: loading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 15,
+                    children: filteredBooks
+                        .map(
+                          (book) => TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        BookDetails(bookId: book.id),
+                                  ));
+                            },
+                            child: BookCard(
+                              title: book["title"].replaceRange(
+                                  11, book["title"].length, '...'),
+                              coverImageUrl: book["thumbnailUrl"] ??
+                                  "https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg",
+                              price: book["price"],
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
         ),
       ],
     );
