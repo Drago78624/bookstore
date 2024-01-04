@@ -69,11 +69,25 @@ class _ShopState extends State<Shop> {
     if (_formKey.currentState!.validate()) {
       for (var book in allBooks) {
         String title = book["title"].toString().toLowerCase();
-        String categories = book["categories"];
-        String authors = book["authors"];
+        List categories = book["categories"];
+        List authors = book["authors"];
 
         if (title.contains(searchController.text.toLowerCase())) {
           results.add(book);
+        }
+        for (var category in categories) {
+          if (category
+              .toLowerCase()
+              .contains(searchController.text.toLowerCase())) {
+            results.add(book);
+          }
+        }
+        for (var author in authors) {
+          if (author
+              .toLowerCase()
+              .contains(searchController.text.toLowerCase())) {
+            results.add(book);
+          }
         }
       }
     } else {
