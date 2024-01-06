@@ -61,10 +61,10 @@ class _BookDetailsState extends State<BookDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Product detail"),
+        title: const Text("Product detail"),
       ),
       body: loading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Padding(
@@ -79,25 +79,25 @@ class _BookDetailsState extends State<BookDetails> {
                           : "https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg",
                       fit: BoxFit.cover,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     CustomHeading(bookData["title"]),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       bookData["authors"].join(", "),
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       "\$${bookData["price"]}",
-                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                      style: const TextStyle(fontSize: 18, color: Colors.grey),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     RatingBar.builder(
@@ -106,8 +106,8 @@ class _BookDetailsState extends State<BookDetails> {
                       direction: Axis.horizontal,
                       allowHalfRating: true,
                       itemCount: 5,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => Icon(
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => const Icon(
                         Icons.star,
                         color: Colors.amber,
                       ),
@@ -115,23 +115,23 @@ class _BookDetailsState extends State<BookDetails> {
                         print(rating);
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     ReadMoreText(
                       bookData["longDescription"],
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                       trimLines: 5,
                       colorClickableText: Colors.pink,
                       trimMode: TrimMode.Line,
                       trimCollapsedText: 'Show more',
                       trimExpandedText: 'Show less',
-                      moreStyle: TextStyle(
+                      moreStyle: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Colors.deepPurple),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     if (FirebaseAuth.instance.currentUser != null)
@@ -143,15 +143,15 @@ class _BookDetailsState extends State<BookDetails> {
                               onPressed: () {
                                 addToWishlist();
                               },
-                              child: Text("Add to Wishlist",
+                              child: const Text("Add to Wishlist",
                                   style: TextStyle(fontSize: 18))),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           ElevatedButton(
                               style: ElevatedButton.styleFrom(),
                               onPressed: () {},
-                              child: Text("Add to Cart",
+                              child: const Text("Add to Cart",
                                   style: TextStyle(fontSize: 18))),
                         ],
                       )

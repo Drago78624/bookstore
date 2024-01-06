@@ -28,10 +28,11 @@ class _ShopState extends State<Shop> {
   List filteredBooks = [];
   SortFilter sortFilter = SortFilter.popularity;
   bool loading = false;
-
-  final collection = db.collection("books");
+  String sortField = "rating";
 
   getAllBooks() async {
+    final collection =
+        db.collection("books").orderBy(sortField, descending: true);
     loading = true;
     var data = await collection.get();
     setState(() {
@@ -131,7 +132,15 @@ class _ShopState extends State<Shop> {
                     }
                     setState(() {
                       sortFilter = value;
+                      if (value == SortFilter.popularity) {
+                        sortField = "rating";
+                      } else if (value == SortFilter.price) {
+                        sortField = "price";
+                      } else {
+                        sortField = "publishedDate";
+                      }
                     });
+                    getAllBooks();
                   },
                 ),
               ],
