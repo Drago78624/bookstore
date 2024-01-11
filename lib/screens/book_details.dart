@@ -1,8 +1,11 @@
+import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/db.dart';
+import 'package:bookstore/models/cart_book.dart';
 import 'package:bookstore/widgets/custom_heading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -16,6 +19,7 @@ class BookDetails extends StatefulWidget {
 }
 
 class _BookDetailsState extends State<BookDetails> {
+  final cartController = Get.put(CartController());
   Map<String, dynamic> bookData = {};
   bool loading = false;
 
@@ -152,7 +156,14 @@ class _BookDetailsState extends State<BookDetails> {
                           ),
                           ElevatedButton(
                               style: ElevatedButton.styleFrom(),
-                              onPressed: () {},
+                              onPressed: () {
+                                final cartBook = CartBook(
+                                    title: bookData["title"],
+                                    price: bookData["price"],
+                                    coverImageUrl: bookData["thumbnailUrl"] ??
+                                        "https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg");
+                                cartController.addBook(cartBook);
+                              },
                               child: const Text("Add to Cart",
                                   style: TextStyle(fontSize: 18))),
                         ],

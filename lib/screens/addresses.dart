@@ -2,7 +2,6 @@ import 'package:bookstore/db.dart';
 import 'package:bookstore/widgets/address_card.dart';
 import 'package:bookstore/widgets/new_address.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class Addresses extends StatefulWidget {
@@ -29,18 +28,13 @@ class _AddressesState extends State<Addresses> {
   List<Map<String, String>> userAddresses = [];
 
   Stream<List> getAllAddresses() {
-    return FirebaseFirestore.instance
+    return db
         .collection("addresses")
         .where("uid", isEqualTo: widget.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => {"addressId": doc.id, ...doc.data()})
             .toList());
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override

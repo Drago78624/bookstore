@@ -1,6 +1,7 @@
 import 'package:bookstore/book_store_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,5 +13,8 @@ Future<void> main() async {
       projectId: "bookstore-6e367",
     ),
   );
-  runApp(const BookStoreApp());
+  runApp(const GetMaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: BookStoreApp(),
+  ));
 }

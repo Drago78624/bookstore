@@ -1,5 +1,4 @@
 import 'package:bookstore/auth/forgot_password.dart';
-import 'package:bookstore/screens/cart.dart';
 import 'package:bookstore/screens/login_screen.dart';
 import 'package:bookstore/screens/register_screen.dart';
 import 'package:bookstore/screens/root.dart';
@@ -24,7 +23,6 @@ class BookStoreApp extends StatelessWidget {
       home: const Root(),
       routes: {
         "/root": (context) => const Root(),
-        "/cart": (context) => const Cart(),
         "/login": (context) => const Login(),
         "/register": (context) => const Register(),
         "/forgot-password": (context) => const ForgotPassword(),

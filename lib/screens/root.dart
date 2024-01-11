@@ -1,5 +1,6 @@
 import 'package:bookstore/helpers/check_auth_user.dart';
 import 'package:bookstore/screens/authors.dart';
+import 'package:bookstore/screens/cart.dart';
 import 'package:bookstore/screens/categories.dart';
 import 'package:bookstore/screens/home_screen.dart';
 import 'package:bookstore/screens/results.dart';
@@ -7,6 +8,7 @@ import 'package:bookstore/screens/shop.dart';
 import 'package:bookstore/screens/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 enum BookFilter { category, author }
 
@@ -104,7 +106,7 @@ class _RootState extends State<Root> {
           else
             IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, "/cart");
+                Get.to(() => Cart());
               },
               icon: Icon(Icons.shopping_cart),
             ),
