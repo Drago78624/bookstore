@@ -1,3 +1,4 @@
+import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/helpers/check_auth_user.dart';
 import 'package:bookstore/screens/authors.dart';
 import 'package:bookstore/screens/cart.dart';
@@ -9,6 +10,7 @@ import 'package:bookstore/screens/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:badges/badges.dart' as badges;
 
 enum BookFilter { category, author }
 
@@ -24,6 +26,7 @@ class _RootState extends State<Root> {
   String? userId;
   BookFilter? filter;
   String? name;
+  final CartController cartController = Get.put(CartController());
 
   @override
   void initState() {
@@ -104,12 +107,19 @@ class _RootState extends State<Root> {
               child: Text("Login"),
             )
           else
-            IconButton(
-              onPressed: () {
-                Get.to(() => Cart());
-              },
-              icon: Icon(Icons.shopping_cart),
-            ),
+            Obx(
+              () => badges.Badge(
+                position: badges.BadgePosition.topStart(),
+                badgeContent: Text(
+                    cartController.books.values.toList().length.toString()),
+                child: IconButton(
+                  onPressed: () {
+                    Get.to(() => Cart());
+                  },
+                  icon: Icon(Icons.shopping_cart),
+                ),
+              ),
+            )
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
