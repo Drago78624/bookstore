@@ -1,13 +1,9 @@
 import 'package:bookstore/helpers/validate_email.dart';
-import 'package:bookstore/screens/home_screen.dart';
-import 'package:bookstore/screens/login_screen.dart';
 import 'package:bookstore/widgets/auth/auth_button.dart';
 import 'package:bookstore/widgets/custom_text_field.dart';
-import 'package:bookstore/widgets/gradient_container.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sign_in_button/sign_in_button.dart';
 
 final db = FirebaseFirestore.instance;
 
@@ -46,7 +42,7 @@ class _RegisterState extends State<Register> {
       try {
         userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
-        final userData = await db.collection("users").add({
+        await db.collection("users").add({
           "uid": userCredential.user!.uid,
           "fullName": fullName,
           "email": email,
@@ -57,7 +53,7 @@ class _RegisterState extends State<Register> {
           (documentSnapshot) =>
               print("Added Data with ID: ${documentSnapshot.id}"),
         );
-        final addressData = await db
+        await db
             .collection("addresses")
             .add({"uid": userCredential.user!.uid, "addresses": []});
         Navigator.pushReplacementNamed(context, "/root");
@@ -188,6 +184,5 @@ class _RegisterState extends State<Register> {
         ),
       ),
     );
-    ;
   }
 }

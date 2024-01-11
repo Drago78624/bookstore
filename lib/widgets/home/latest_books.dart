@@ -1,4 +1,3 @@
-import 'package:bookstore/models/book.dart';
 import 'package:bookstore/models/book_card_model.dart';
 import 'package:bookstore/screens/book_details.dart';
 import 'package:bookstore/widgets/book_card.dart';

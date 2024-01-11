@@ -1,5 +1,4 @@
 import 'package:bookstore/screens/root.dart';
-import 'package:bookstore/screens/shop.dart';
 import 'package:bookstore/widgets/category_card.dart';
 import 'package:flutter/material.dart';
 

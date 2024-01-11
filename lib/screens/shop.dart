@@ -1,13 +1,8 @@
-import 'package:bookstore/models/book.dart';
-import 'package:bookstore/models/book_card_model.dart';
 import 'package:bookstore/screens/book_details.dart';
-import 'package:bookstore/screens/root.dart';
 import 'package:bookstore/widgets/book_card.dart';
 import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:string_capitalize/string_capitalize.dart';
-import 'package:filter_list/filter_list.dart';
 
 final _formKey = GlobalKey<FormState>();
 

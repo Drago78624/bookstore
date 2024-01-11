@@ -1,6 +1,5 @@
 import 'package:bookstore/screens/root.dart';
 import 'package:bookstore/widgets/author_card.dart';
-import 'package:bookstore/widgets/category_card.dart';
 import 'package:flutter/material.dart';
 
 const authorsAvailable = [

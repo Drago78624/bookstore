@@ -1,20 +1,21 @@
+import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddressCard extends StatelessWidget {
-  const AddressCard(
-      {super.key, required this.addressData, required this.addressId});
+  const AddressCard({
+    super.key,
+    required this.addressData,
+  });
 
-  final String addressData;
-  final String addressId;
+  final Map addressData;
 
   removeAddress() async {
-    final addressRef =
-        FirebaseFirestore.instance.collection("addresses").doc(addressId);
+    final addressRef = FirebaseFirestore.instance
+        .collection("addresses")
+        .doc(addressData["addressId"]);
 
-    await addressRef.update({
-      "addresses": FieldValue.arrayRemove([addressData]),
-    });
+    await addressRef.delete();
   }
 
   @override
@@ -26,7 +27,7 @@ class AddressCard extends StatelessWidget {
           horizontal: 20,
         ),
       ),
-      key: ValueKey(addressData),
+      key: UniqueKey(),
       onDismissed: (direction) {
         removeAddress();
       },
@@ -36,11 +37,9 @@ class AddressCard extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                addressData,
+                addressData["address"].toString(),
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-              Spacer(),
-              Icon(Icons.edit)
             ],
           ),
         ),

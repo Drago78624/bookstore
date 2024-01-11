@@ -1,11 +1,8 @@
 import 'package:bookstore/auth/forgot_password.dart';
-import 'package:bookstore/screens/book_details.dart';
 import 'package:bookstore/screens/cart.dart';
-import 'package:bookstore/screens/home_screen.dart';
 import 'package:bookstore/screens/login_screen.dart';
 import 'package:bookstore/screens/register_screen.dart';
 import 'package:bookstore/screens/root.dart';
-import 'package:bookstore/screens/shop.dart';
 import 'package:flutter/material.dart';
 
 class BookStoreApp extends StatelessWidget {

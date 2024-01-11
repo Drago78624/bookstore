@@ -119,7 +119,9 @@ class _BookDetailsState extends State<BookDetails> {
                       height: 10,
                     ),
                     ReadMoreText(
-                      bookData["longDescription"],
+                      bookData["longDescription"] ??
+                          bookData["shortDescription"] ??
+                          "No Description Available",
                       style: const TextStyle(fontSize: 18),
                       trimLines: 5,
                       colorClickableText: Colors.pink,

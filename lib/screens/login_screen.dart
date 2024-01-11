@@ -1,7 +1,4 @@
-import 'package:bookstore/auth/forgot_password.dart';
 import 'package:bookstore/helpers/validate_email.dart';
-import 'package:bookstore/screens/home_screen.dart';
-import 'package:bookstore/screens/register_screen.dart';
 import 'package:bookstore/widgets/auth/auth_button.dart';
 import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,9 +55,8 @@ class _LoginState extends State<Login> {
       });
       final email = emailController.text.toString();
       final password = passwordController.text.toString();
-      UserCredential? userCredential;
       try {
-        userCredential = await FirebaseAuth.instance
+        await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
         setState(() {
           loading = false;
