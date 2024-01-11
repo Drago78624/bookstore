@@ -36,6 +36,8 @@ class CartController extends GetxController {
 
   get books => _books;
 
+  get length => _books.length;
+
   get booksSubtotal =>
       _books.entries.map((book) => book.key.price * book.value).toList();
 

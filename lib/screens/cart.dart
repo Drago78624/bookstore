@@ -13,35 +13,38 @@ class Cart extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Cart")),
       body: Obx(
-        () => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                    itemCount: cartController.books.length,
-                    itemBuilder: (context, index) => CartBookCard(
-                        cartController: cartController,
-                        quantity: cartController.books.values.toList()[index],
-                        book: cartController.books.keys.toList()[index],
-                        index: index)),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(children: [
-                    const CustomHeading("Total"),
-                    const Spacer(),
-                    Text(
-                      "\$${cartController.total}",
-                      style: const TextStyle(fontSize: 18),
+        () => cartController.length > 0
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount: cartController.books.length,
+                          itemBuilder: (context, index) => CartBookCard(
+                              cartController: cartController,
+                              quantity:
+                                  cartController.books.values.toList()[index],
+                              book: cartController.books.keys.toList()[index],
+                              index: index)),
+                    ),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(children: [
+                          const CustomHeading("Total"),
+                          const Spacer(),
+                          Text(
+                            "\$${cartController.total}",
+                            style: const TextStyle(fontSize: 18),
+                          )
+                        ]),
+                      ),
                     )
-                  ]),
+                  ],
                 ),
               )
-            ],
-          ),
-        ),
+            : Center(child: CustomHeading("Cart is empty")),
       ),
     );
   }
