@@ -1,4 +1,5 @@
 import 'package:bookstore/book_store_app.dart';
+import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,8 +14,7 @@ Future<void> main() async {
       projectId: "bookstore-6e367",
     ),
   );
-  runApp(const GetMaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: BookStoreApp(),
-  ));
+  Get.put(CartController());
+  runApp(const BookStoreApp(),
+  );
 }

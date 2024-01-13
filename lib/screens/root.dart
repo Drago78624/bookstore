@@ -26,15 +26,16 @@ class _RootState extends State<Root> {
   String? userId;
   BookFilter? filter;
   String? name;
-  final CartController cartController = Get.put(CartController());
+  final cartController = Get.find<CartController>();
 
   @override
   void initState() {
+    super.initState();
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       userId = FirebaseAuth.instance.currentUser!.uid;
+      cartController.fetchCartItems();
     }
-    super.initState();
   }
 
   void _onItemTapped(int index) {
@@ -48,11 +49,7 @@ class _RootState extends State<Root> {
       filter = enteredFilter;
       name = enteredName;
     });
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Results(filter: filter, filterName: name),
-        ));
+    Get.to(Results(filter: filter, filterName: name));
   }
 
   @override
@@ -86,7 +83,8 @@ class _RootState extends State<Root> {
       Categories(setFilter: setFilter),
       Authors(setFilter: setFilter),
       Shop(),
-      if (checkUserAuth()) UserProfile(userId: userId!)
+      if (checkUserAuth())
+        UserProfile(userId: userId!, cartController: Get.find())
     ];
 
     return Scaffold(
@@ -102,7 +100,7 @@ class _RootState extends State<Root> {
             TextButton(
               style: TextButton.styleFrom(foregroundColor: Colors.white),
               onPressed: () {
-                Navigator.pushNamed(context, "/login");
+                Get.toNamed("/login");
               },
               child: Text("Login"),
             )

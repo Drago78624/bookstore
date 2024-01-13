@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:uuid/uuid.dart';
 
 class BookDetails extends StatefulWidget {
   const BookDetails({super.key, required this.bookId});
@@ -158,6 +159,8 @@ class _BookDetailsState extends State<BookDetails> {
                               style: ElevatedButton.styleFrom(),
                               onPressed: () {
                                 final cartBook = CartBook(
+                                    id: Uuid().v4(),
+                                    quantity: 1,
                                     title: bookData["title"],
                                     price: bookData["price"],
                                     coverImageUrl: bookData["thumbnailUrl"] ??

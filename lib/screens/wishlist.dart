@@ -3,6 +3,7 @@ import 'package:bookstore/screens/book_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 final db = FirebaseFirestore.instance;
 
@@ -77,12 +78,7 @@ class _WishlistState extends State<Wishlist> {
                     removeFromWishlist(wishlistBook.docId!),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              BookDetails(bookId: wishlistBook.id),
-                        ));
+                    Get.to(BookDetails(bookId: wishlistBook.id));
                   },
                   child: Card(
                     child: Padding(

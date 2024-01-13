@@ -4,6 +4,7 @@ import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 final db = FirebaseFirestore.instance;
 
@@ -56,7 +57,8 @@ class _RegisterState extends State<Register> {
         await db
             .collection("addresses")
             .add({"uid": userCredential.user!.uid, "addresses": []});
-        Navigator.pushReplacementNamed(context, "/root");
+        Get.offNamed('/root');
+
       } on FirebaseAuthException catch (ex) {
         showDialog(
           context: context,
@@ -66,7 +68,7 @@ class _RegisterState extends State<Register> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(ctx);
+                  Get.back();
                 },
                 child: const Text('Try again'),
               ),
@@ -173,7 +175,7 @@ class _RegisterState extends State<Register> {
                   const Text("Already have an account ?"),
                   TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Get.back();
                     },
                     child: const Text("Login"),
                   )

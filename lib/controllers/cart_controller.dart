@@ -1,15 +1,52 @@
+import 'package:bookstore/db.dart';
 import 'package:bookstore/models/cart_book.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController {
   final _books = {}.obs;
+  final collection = db.collection("cart");
+  final user = FirebaseAuth.instance.currentUser;
 
-  void addBook(CartBook book) {
+  @override
+  void onInit() {
+    super.onInit();
+    fetchCartItems();
+  }
+
+  Future<void> fetchCartItems() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return;
+      }
+
+      final userCartDocs =
+          await collection.doc(user.uid).collection('items').get();
+      final books =
+          userCartDocs.docs.map((doc) => CartBook.fromFirestore(doc)).toList();
+      _books.clear();
+      _books.addAll(Map.fromIterables(books, books.map((b) => b.quantity)));
+    } catch (error) {
+      print("something went wrong");
+    }
+  }
+
+  void addBook(CartBook book) async {
     if (_books.containsKey(book)) {
       _books[book] += 1;
     } else {
       _books[book] = 1;
     }
+    final docRef = collection.doc(user!.uid).collection('items').doc(book.id);
+    await docRef.set({
+      "title": book.title,
+      "price": book.price,
+      "coverImageUrl": book.coverImageUrl,
+      "quantity": _books[book],
+      "subTotal": book.price * _books[book],
+    });
 
     Get.snackbar(
       "Book Added",
@@ -19,12 +56,20 @@ class CartController extends GetxController {
     );
   }
 
-  void removeBook(CartBook book) {
+  void removeBook(CartBook book) async {
     if (_books.containsKey(book) && _books[book] == 1) {
       _books.removeWhere((key, value) => key == book);
+      final docRef = collection.doc(user!.uid).collection('items').doc(book.id);
+      await docRef.delete();
     } else {
       _books[book] -= 1;
     }
+
+    final docRef = collection.doc(user!.uid).collection('items').doc(book.id);
+    await docRef.update({
+      "quantity": FieldValue.increment(-1),
+      "subTotal": FieldValue.increment(-book.price),
+    });
 
     Get.snackbar(
       "Book Removed",

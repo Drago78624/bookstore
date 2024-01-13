@@ -1,16 +1,20 @@
+import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/models/user.dart';
 import 'package:bookstore/screens/addresses.dart';
 import 'package:bookstore/screens/wishlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 final db = FirebaseFirestore.instance;
 
 class UserProfile extends StatefulWidget {
-  const UserProfile({super.key, required this.userId});
+  const UserProfile(
+      {super.key, required this.userId, required this.cartController});
 
   final String userId;
+  final CartController cartController;
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -77,14 +81,9 @@ class _UserProfileState extends State<UserProfile> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Wishlist(
-                            userId: userData!.userId,
-                          ),
-                        ),
-                      );
+                      Get.to(Wishlist(
+                        userId: userData!.userId,
+                      ));
                     },
                     child: const Row(
                       children: [
@@ -118,12 +117,7 @@ class _UserProfileState extends State<UserProfile> {
                   const Divider(),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Addresses(
-                                uid: widget.userId),
-                          ));
+                      Get.to(Addresses(uid: widget.userId));
                     },
                     child: const Row(
                       children: [
@@ -142,7 +136,8 @@ class _UserProfileState extends State<UserProfile> {
                   TextButton(
                     onPressed: () async {
                       await FirebaseAuth.instance.signOut();
-                      Navigator.pushReplacementNamed(context, "/root");
+                      Get.offNamed('/root');
+                      Get.delete<CartController>();
                     },
                     child: const Row(
                       children: [

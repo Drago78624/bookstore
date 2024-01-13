@@ -1,8 +1,10 @@
+import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/helpers/validate_email.dart';
 import 'package:bookstore/widgets/auth/auth_button.dart';
 import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final _formKey = GlobalKey<FormState>();
@@ -40,7 +42,7 @@ class _LoginState extends State<Login> {
         return await FirebaseAuth.instance
             .signInWithCredential(credential)
             .then((value) {
-          return Navigator.pushReplacementNamed(context, "/root");
+          return Get.offNamed('/root');
         });
       }
     } catch (ex) {
@@ -61,10 +63,8 @@ class _LoginState extends State<Login> {
         setState(() {
           loading = false;
         });
-        Navigator.pushReplacementNamed(
-          context,
-          "/root",
-        );
+        Get.put(CartController());
+        Get.toNamed('/root');
       } on FirebaseAuthException catch (ex) {
         print(ex.code);
         String errorText = "";
@@ -84,7 +84,8 @@ class _LoginState extends State<Login> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(ctx);
+                  Get.back();
+                  ;
                 },
                 child: const Text('Try again'),
               ),
@@ -164,7 +165,7 @@ class _LoginState extends State<Login> {
                   const Text("Don't have an account ?"),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/register");
+                      Get.toNamed('/register');
                     },
                     child: const Text("Register"),
                   )
@@ -175,10 +176,7 @@ class _LoginState extends State<Login> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    "/forgot-password",
-                  );
+                  Get.toNamed('/forgot-password');
                 },
                 child: Text("Forgot Password?"),
               )

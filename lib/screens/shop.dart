@@ -3,6 +3,7 @@ import 'package:bookstore/widgets/book_card.dart';
 import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -156,12 +157,7 @@ class _ShopState extends State<Shop> {
                         .map(
                           (book) => TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        BookDetails(bookId: book.id),
-                                  ));
+                              Get.to(BookDetails(bookId: book.id));
                             },
                             child: BookCard(
                               title: book["title"].replaceRange(

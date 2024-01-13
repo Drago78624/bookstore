@@ -3,13 +3,14 @@ import 'package:bookstore/screens/login_screen.dart';
 import 'package:bookstore/screens/register_screen.dart';
 import 'package:bookstore/screens/root.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class BookStoreApp extends StatelessWidget {
   const BookStoreApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Book Store',
       theme: ThemeData(
@@ -21,12 +22,12 @@ class BookStoreApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const Root(),
-      routes: {
-        "/root": (context) => const Root(),
-        "/login": (context) => const Login(),
-        "/register": (context) => const Register(),
-        "/forgot-password": (context) => const ForgotPassword(),
-      },
+      getPages: [
+        GetPage(name: '/root', page: () => Root()),
+        GetPage(name: '/login', page: () => Login()),
+        GetPage(name: '/register', page: () => Register()),
+        GetPage(name: '/forgot-password', page: () => ForgotPassword()),
+      ],
     );
   }
 }

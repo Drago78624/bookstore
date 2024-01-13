@@ -1,11 +1,20 @@
 import 'package:bookstore/controllers/cart_controller.dart';
+import 'package:bookstore/db.dart';
+import 'package:bookstore/models/cart_book.dart';
 import 'package:bookstore/widgets/cart_book_card.dart';
 import 'package:bookstore/widgets/custom_heading.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Cart extends StatelessWidget {
+class Cart extends StatefulWidget {
   Cart({super.key});
+
+  @override
+  State<Cart> createState() => _CartState();
+}
+
+class _CartState extends State<Cart> {
   final CartController cartController = Get.find();
 
   @override

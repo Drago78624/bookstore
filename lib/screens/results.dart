@@ -4,6 +4,7 @@ import 'package:bookstore/screens/root.dart';
 import 'package:bookstore/widgets/book_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 final db = FirebaseFirestore.instance;
 
@@ -70,11 +71,7 @@ class _ResultsState extends State<Results> {
               .map(
                 (book) => TextButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookDetails(bookId: book.id),
-                        ));
+                    Get.to(BookDetails(bookId: book.id));
                   },
                   child: BookCard(
                     title:

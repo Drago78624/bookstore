@@ -3,6 +3,7 @@ import 'package:bookstore/widgets/auth/auth_button.dart';
 import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -42,10 +43,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               ),
               TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      "/login",
-                    );
+                    Get.toNamed('/login');
                   },
                   child: const Text("Login"))
             ],
