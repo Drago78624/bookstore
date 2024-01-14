@@ -11,10 +11,14 @@ final db = FirebaseFirestore.instance;
 
 class UserProfile extends StatefulWidget {
   const UserProfile(
-      {super.key, required this.userId, required this.cartController});
+      {super.key,
+      required this.userId,
+      required this.cartController,
+      required this.changeScreen});
 
   final String userId;
   final CartController cartController;
+  final void Function(int index) changeScreen;
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -137,6 +141,7 @@ class _UserProfileState extends State<UserProfile> {
                     onPressed: () async {
                       await FirebaseAuth.instance.signOut();
                       Get.offNamed('/root');
+                      widget.changeScreen(0);
                       Get.delete<CartController>();
                     },
                     child: const Row(

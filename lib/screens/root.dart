@@ -84,7 +84,7 @@ class _RootState extends State<Root> {
       Authors(setFilter: setFilter),
       Shop(),
       if (checkUserAuth())
-        UserProfile(userId: userId!, cartController: Get.find())
+        UserProfile(userId: userId!, cartController: Get.find(), changeScreen: _onItemTapped)
     ];
 
     return Scaffold(
