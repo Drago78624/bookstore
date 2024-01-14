@@ -1,6 +1,8 @@
+import 'package:bookstore/helpers/colors.dart';
 import 'package:bookstore/screens/root.dart';
 import 'package:bookstore/widgets/category_card.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 const List<String> categoriesAvailable = [
   "Open Source",
@@ -28,8 +30,14 @@ class Categories extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: GridView.count(
         crossAxisCount: 2,
-        children: categoriesAvailable.map((category) {
-          return CategoryCard(categoryName: category, setFilter: setFilter);
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 20,
+        children: categoriesAvailable.mapIndexed((index, category) {
+          return CategoryCard(
+            categoryName: category,
+            setFilter: setFilter,
+            bgColor: colors[index],
+          );
         }).toList(),
       ),
     );

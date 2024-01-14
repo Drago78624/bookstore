@@ -9,7 +9,7 @@ class CustomTextField extends StatelessWidget {
       this.suffixIcon,
       this.isPassword = false,
       this.hint,
-      this.onChanged});
+      this.onChanged, this.decoration});
 
   final TextEditingController fieldController;
   final String label;
@@ -18,6 +18,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final String? hint;
   final void Function(String)? onChanged;
+  final InputDecoration? decoration;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class CustomTextField extends StatelessWidget {
       onChanged: onChanged,
       controller: fieldController,
       obscureText: isPassword,
-      decoration: InputDecoration(
+      decoration: decoration ?? InputDecoration(
         hintText: hint,
         label: Text(label),
         border: const OutlineInputBorder(

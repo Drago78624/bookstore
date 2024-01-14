@@ -78,7 +78,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 AuthButton(
                   onTap: _resetPassword,
                   title: "Reset Password",
-                  color: Colors.deepPurple,
+                  color: Color(0xff1363DF),
                 )
               ],
             ),

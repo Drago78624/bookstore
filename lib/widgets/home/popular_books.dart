@@ -51,47 +51,33 @@ class _PopularBooksState extends State<PopularBooks> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            children: [
-              CustomHeading("Popular Books"),
-              Spacer(),
-              SeeAllBtn(
-                onTap: widget.onTap,
-              )
-            ],
-          ),
+    if (popularBooks.isEmpty) {
+      return Center(
+          child: CircularProgressIndicator()); // Display loading indicator
+    } else {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: popularBooks
+              .map((popularBook) => TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              BookDetails(bookId: popularBook.id),
+                        ),
+                      );
+                    },
+                    child: BookCard(
+                        title: popularBook.title
+                            .replaceRange(11, popularBook.title.length, '...'),
+                        coverImageUrl: popularBook.coverImageUrl!,
+                        price: popularBook.price),
+                  ))
+              .toList(),
         ),
-        Expanded(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: popularBooks
-                  .map((popularBook) => TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BookDetails(bookId: popularBook.id),
-                            ),
-                          );
-                        },
-                        child: BookCard(
-                            title: popularBook.title.replaceRange(
-                                11, popularBook.title.length, '...'),
-                            coverImageUrl: popularBook.coverImageUrl!,
-                            price: popularBook.price),
-                      ))
-                  .toList(),
-            ),
-          ),
-        ),
-      ],
-    );
+      );
+    }
   }
 }

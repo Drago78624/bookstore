@@ -1,6 +1,8 @@
+import 'package:bookstore/helpers/colors.dart';
 import 'package:bookstore/screens/root.dart';
 import 'package:bookstore/widgets/author_card.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 const authorsAvailable = [
   "W. Frank Ableson",
@@ -46,9 +48,13 @@ class Authors extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: GridView.count(
         crossAxisCount: 2,
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 20,
         children: authorsAvailable.map((author) {
           return AuthorCard(
-              authorName: author, setFilter: setFilter);
+            authorName: author,
+            setFilter: setFilter,
+          );
         }).toList(),
       ),
     );

@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:getwidget/getwidget.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -109,8 +110,7 @@ class _LoginState extends State<Login> {
           "Login",
           style: TextStyle(fontSize: 32),
         ),
-        backgroundColor: Color.fromARGB(255, 26, 5, 62),
-        foregroundColor: Colors.white,
+        backgroundColor: Color(0xff06283D),
         toolbarHeight: 100,
       ),
       body: Padding(
@@ -150,7 +150,7 @@ class _LoginState extends State<Login> {
                 height: 20,
               ),
               AuthButton(
-                  onTap: _login, title: "Login", color: Colors.deepPurple),
+                  onTap: _login, title: "Login", color: Color(0xff1363DF)),
               const Divider(height: 40),
               AuthButton(
                   onTap: loginWithGoogle,

@@ -15,10 +15,10 @@ class BookStoreApp extends StatelessWidget {
       title: 'Book Store',
       theme: ThemeData(
         appBarTheme: AppBarTheme().copyWith(
-          backgroundColor: Color.fromARGB(255, 26, 5, 62),
-          foregroundColor: Colors.white,
-        ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            backgroundColor: Color(0xff06283D),
+            foregroundColor: Colors.white,
+            actionsIconTheme: IconThemeData(color: Colors.white)),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff1363DF)),
         useMaterial3: true,
       ),
       home: const Root(),

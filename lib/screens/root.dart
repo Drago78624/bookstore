@@ -82,27 +82,28 @@ class _RootState extends State<Root> {
       Home(onTap: _onItemTapped),
       Categories(setFilter: setFilter),
       Authors(setFilter: setFilter),
-      Shop(),
+      const Shop(),
       if (checkUserAuth())
-        UserProfile(userId: userId!, cartController: Get.find(), changeScreen: _onItemTapped)
+        UserProfile(
+            userId: userId!,
+            cartController: Get.find(),
+            changeScreen: _onItemTapped)
     ];
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color.fromARGB(255, 26, 5, 62),
-        foregroundColor: Colors.white,
         title: const Text(
           "Book Store",
         ),
         actions: [
           if (!checkUserAuth())
-            TextButton(
-              style: TextButton.styleFrom(foregroundColor: Colors.white),
+            IconButton(
+              // style: TextButton.styleFrom(foregroundColor: Colors.white),
               onPressed: () {
                 Get.toNamed("/login");
               },
-              child: Text("Login"),
+              icon: const Icon(Icons.login),
             )
           else
             Obx(
@@ -114,7 +115,7 @@ class _RootState extends State<Root> {
                   onPressed: () {
                     Get.to(() => Cart());
                   },
-                  icon: Icon(Icons.shopping_cart),
+                  icon: const Icon(Icons.shopping_cart),
                 ),
               ),
             )
@@ -126,7 +127,7 @@ class _RootState extends State<Root> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedItemColor:
-            Colors.deepPurple, // Explicitly set selectedItemColor
+            Color(0xff06283D), // Explicitly set selectedItemColor
         unselectedItemColor: Colors.grey,
       ),
     );

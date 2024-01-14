@@ -58,7 +58,6 @@ class _RegisterState extends State<Register> {
             .collection("addresses")
             .add({"uid": userCredential.user!.uid, "addresses": []});
         Get.offNamed('/root');
-
       } on FirebaseAuthException catch (ex) {
         showDialog(
           context: context,
@@ -87,8 +86,8 @@ class _RegisterState extends State<Register> {
           "Register",
           style: TextStyle(fontSize: 32),
         ),
-        backgroundColor: Color.fromARGB(255, 26, 5, 62),
-        foregroundColor: Colors.white,
+        // backgroundColor: Color.fromARGB(255, 26, 5, 62),
+        // foregroundColor: Colors.white,
         toolbarHeight: 100,
       ),
       body: Padding(
@@ -160,7 +159,7 @@ class _RegisterState extends State<Register> {
               AuthButton(
                   onTap: _register,
                   title: "Register",
-                  color: Colors.deepPurple),
+                  color: Color(0xff1363DF)),
               const Divider(height: 40),
               AuthButton(
                   onTap: () {},

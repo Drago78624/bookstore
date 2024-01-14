@@ -48,45 +48,33 @@ class _LatestBooksState extends State<LatestBooks> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            children: [
-              const CustomHeading("Latest Books"),
-              const Spacer(),
-              SeeAllBtn(onTap: widget.onTap),
-            ],
-          ),
+    if (latestBooks.isEmpty) {
+      return Center(
+          child: CircularProgressIndicator()); // Display loading indicator
+    } else {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: latestBooks
+              .map((latestBook) => TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              BookDetails(bookId: latestBook.id),
+                        ),
+                      );
+                    },
+                    child: BookCard(
+                        title: latestBook.title
+                            .replaceRange(11, latestBook.title.length, '...'),
+                        coverImageUrl: latestBook.coverImageUrl!,
+                        price: latestBook.price),
+                  ))
+              .toList(),
         ),
-        Expanded(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: latestBooks
-                  .map((latestBook) => TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BookDetails(bookId: latestBook.id),
-                            ),
-                          );
-                        },
-                        child: BookCard(
-                            title: latestBook.title.replaceRange(
-                                11, latestBook.title.length, '...'),
-                            coverImageUrl: latestBook.coverImageUrl!,
-                            price: latestBook.price),
-                      ))
-                  .toList(),
-            ),
-          ),
-        ),
-      ],
-    );
+      );
+    }
   }
 }
