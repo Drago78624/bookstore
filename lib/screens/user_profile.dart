@@ -1,6 +1,7 @@
 import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/models/user.dart';
 import 'package:bookstore/screens/addresses.dart';
+import 'package:bookstore/screens/payment_methods.dart';
 import 'package:bookstore/screens/wishlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -127,6 +128,24 @@ class _UserProfileState extends State<UserProfile> {
                       children: [
                         Text(
                           "My Addresses",
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        Spacer(),
+                        Icon(Icons.arrow_forward),
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  TextButton(
+                    onPressed: () {
+                      Get.to(PaymentMethods());
+                    },
+                    child: const Row(
+                      children: [
+                        Text(
+                          "Payment Methods",
                           style: TextStyle(
                             fontSize: 18,
                           ),

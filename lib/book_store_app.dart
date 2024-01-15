@@ -1,4 +1,5 @@
 import 'package:bookstore/auth/forgot_password.dart';
+import 'package:bookstore/screens/add_payment_method.dart';
 import 'package:bookstore/screens/login_screen.dart';
 import 'package:bookstore/screens/register_screen.dart';
 import 'package:bookstore/screens/root.dart';
@@ -27,6 +28,7 @@ class BookStoreApp extends StatelessWidget {
         GetPage(name: '/login', page: () => Login()),
         GetPage(name: '/register', page: () => Register()),
         GetPage(name: '/forgot-password', page: () => ForgotPassword()),
+        GetPage(name: '/add-payment-method', page: () => AddPaymentMethod()),
       ],
     );
   }

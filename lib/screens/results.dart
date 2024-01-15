@@ -62,28 +62,32 @@ class _ResultsState extends State<Results> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Search Results")),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 15,
-          children: filteredBooks
-              .map(
-                (book) => TextButton(
-                  onPressed: () {
-                    Get.to(BookDetails(bookId: book.id));
-                  },
-                  child: BookCard(
-                    title:
-                        book.title.replaceRange(11, book.title.length, '...'),
-                    coverImageUrl: book.coverImageUrl!,
-                    price: book.price,
-                  ),
-                ),
-              )
-              .toList(),
-        ),
-      ),
+      body: filteredBooks.isEmpty
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 15,
+                children: filteredBooks
+                    .map(
+                      (book) => TextButton(
+                        onPressed: () {
+                          Get.to(BookDetails(bookId: book.id));
+                        },
+                        child: BookCard(
+                          title: book.title
+                              .replaceRange(11, book.title.length, '...'),
+                          coverImageUrl: book.coverImageUrl!,
+                          price: book.price,
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
     );
   }
 }
