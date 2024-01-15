@@ -1,7 +1,11 @@
+import 'package:bookstore/controllers/payment_methods_controller.dart';
+import 'package:bookstore/models/payment_method_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+final GlobalKey<FormState> _paymentMethodFormKey = GlobalKey<FormState>();
 
 class AddPaymentMethod extends StatefulWidget {
   const AddPaymentMethod({super.key});
@@ -11,6 +15,7 @@ class AddPaymentMethod extends StatefulWidget {
 }
 
 class _AddPaymentMethodState extends State<AddPaymentMethod> {
+  final PaymentMethodsController paymentMethodsController = Get.find();
   String cardNumber = '';
   String expiryDate = '';
   String cardHolderName = '';
@@ -30,7 +35,7 @@ class _AddPaymentMethodState extends State<AddPaymentMethod> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text("Add Payment Method")),
+      appBar: AppBar(title: const Text("Add Payment Method")),
       body: Builder(
         builder: (BuildContext context) {
           return Container(
@@ -72,7 +77,7 @@ class _AddPaymentMethodState extends State<AddPaymentMethod> {
                       child: Column(
                         children: <Widget>[
                           CreditCardForm(
-                            formKey: _formKey,
+                            formKey: _paymentMethodFormKey,
                             obscureCvv: true,
                             obscureNumber: true,
                             cardNumber: cardNumber,
@@ -137,9 +142,22 @@ class _AddPaymentMethodState extends State<AddPaymentMethod> {
     );
   }
 
-  void _onValidate() {
-    if (_formKey.currentState?.validate() ?? false) {
-      print('valid!');
+  void _onValidate() async {
+    if (_paymentMethodFormKey.currentState?.validate() ?? false) {
+      // final cardData = {
+      //   'cardNumber': cardNumber,
+      //   'expiryDate': expiryDate,
+      //   'cardHolderName': cardHolderName,
+      //   'cvvCode': cvvCode,
+      // };
+      final paymentMethodData = PaymentMethodModel(
+        id: const Uuid().v4(),
+          cardNumber: cardNumber,
+          expiryDate: expiryDate,
+          cardHolderName: cardHolderName,
+          cvvCode: cvvCode);
+      await paymentMethodsController.addPaymentMethod(paymentMethodData.toMap());
+      Navigator.pop(context); // Close the page after adding
     } else {
       print('invalid!');
     }

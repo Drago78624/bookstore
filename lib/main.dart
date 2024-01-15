@@ -1,5 +1,6 @@
 import 'package:bookstore/book_store_app.dart';
 import 'package:bookstore/controllers/cart_controller.dart';
+import 'package:bookstore/controllers/payment_methods_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
     ),
   );
   Get.put(CartController());
+  Get.put(PaymentMethodsController());
   runApp(const BookStoreApp(),
   );
 }
