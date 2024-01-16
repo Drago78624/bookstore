@@ -1,4 +1,8 @@
+import 'dart:isolate';
+
 import 'package:bookstore/controllers/cart_controller.dart';
+import 'package:bookstore/controllers/payment_methods_controller.dart';
+import 'package:bookstore/db.dart';
 import 'package:bookstore/helpers/validate_email.dart';
 import 'package:bookstore/widgets/auth/auth_button.dart';
 import 'package:bookstore/widgets/custom_text_field.dart';
@@ -39,14 +43,56 @@ class _LoginState extends State<Login> {
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
+        try {
+          setState(() {
+            loading = true;
+          });
+          final userCredential =
+              await FirebaseAuth.instance.signInWithCredential(credential);
+          final uid = userCredential.user!.uid;
 
-        return await FirebaseAuth.instance
-            .signInWithCredential(credential)
-            .then((value) {
-          return Get.offNamed('/root');
-        });
+// Check for existing user document
+          final userDoc = db.collection("users").doc(uid);
+          final userDocSnapshot = await userDoc.get();
+
+// Create user document if it doesn't exist
+          if (!userDocSnapshot.exists) {
+            await userDoc.set({
+              "uid": uid,
+              "fullName": userCredential.user!.displayName,
+              "email": userCredential.user!.email,
+              "password": null,
+              "addresses": [],
+              "paymentMethods": []
+            });
+            print("Added Data with ID: $uid");
+          }
+
+// Check for existing address document
+          final addressDoc = db.collection("addresses").doc(uid);
+          final addressDocSnapshot = await addressDoc.get();
+
+// Create address document if it doesn't exist
+          if (!addressDocSnapshot.exists) {
+            await addressDoc.set({"uid": uid, "addresses": []});
+          }
+          setState(() {
+            loading = false;
+          });
+          Get.put(CartController());
+          Get.put(PaymentMethodsController());
+          Get.toNamed("/root");
+        } catch (err) {
+          setState(() {
+            loading = false;
+          });
+          print(err);
+        }
       }
     } catch (ex) {
+      setState(() {
+        loading = false;
+      });
       print(ex);
     }
   }
@@ -65,6 +111,7 @@ class _LoginState extends State<Login> {
           loading = false;
         });
         Get.put(CartController());
+          Get.put(PaymentMethodsController());
         Get.toNamed('/root');
       } on FirebaseAuthException catch (ex) {
         print(ex.code);

@@ -1,3 +1,5 @@
+import 'package:bookstore/controllers/cart_controller.dart';
+import 'package:bookstore/controllers/payment_methods_controller.dart';
 import 'package:bookstore/helpers/validate_email.dart';
 import 'package:bookstore/widgets/auth/auth_button.dart';
 import 'package:bookstore/widgets/custom_text_field.dart';
@@ -5,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 final db = FirebaseFirestore.instance;
 
@@ -24,6 +27,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   bool isObscure = true;
+  bool loading = false;
 
   String? validateConfirmPassword(String confirmPassword) {
     if (confirmPassword.length < 8) {
@@ -34,8 +38,82 @@ class _RegisterState extends State<Register> {
     return null;
   }
 
+  loginWithGoogle() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+        clientId:
+            "510404350394-3dmfmblrvkmdmuev6ginv27e547pad2m.apps.googleusercontent.com");
+
+    try {
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser != null) {
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        try {
+          setState(() {
+            loading = true;
+          });
+          final userCredential =
+              await FirebaseAuth.instance.signInWithCredential(credential);
+          final uid = userCredential.user!.uid;
+
+// Check for existing user document
+          final userDoc = db.collection("users").doc(uid);
+          final userDocSnapshot = await userDoc.get();
+
+// Create user document if it doesn't exist
+          if (!userDocSnapshot.exists) {
+            await userDoc.set({
+              "uid": uid,
+              "fullName": userCredential.user!.displayName,
+              "email": userCredential.user!.email,
+              "password": null,
+              "addresses": [],
+              "paymentMethods": []
+            });
+            print("Added Data with ID: $uid");
+          }
+
+// Check for existing address document
+          final addressDoc = db.collection("addresses").doc(uid);
+          final addressDocSnapshot = await addressDoc.get();
+
+// Create address document if it doesn't exist
+          if (!addressDocSnapshot.exists) {
+            await addressDoc.set({"uid": uid, "addresses": []});
+          }
+          setState(() {
+            loading = false;
+          });
+          Get.put(CartController());
+          Get.put(PaymentMethodsController());
+
+          Get.toNamed("/root");
+        } catch (err) {
+          setState(() {
+            loading = false;
+          });
+          print(err);
+        }
+      }
+    } catch (ex) {
+      setState(() {
+        loading = false;
+      });
+      print(ex);
+    }
+  }
+
   void _register() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        loading = true;
+      });
       final email = emailController.text.toString();
       final password = passwordController.text.toString();
       final fullName = fullNameController.text.toString();
@@ -57,8 +135,16 @@ class _RegisterState extends State<Register> {
         await db
             .collection("addresses")
             .add({"uid": userCredential.user!.uid, "addresses": []});
+        setState(() {
+          loading = false;
+        });
+        Get.put(PaymentMethodsController());
+        Get.put(CartController());
         Get.offNamed('/root');
       } on FirebaseAuthException catch (ex) {
+        setState(() {
+          loading = false;
+        });
         showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
@@ -94,93 +180,95 @@ class _RegisterState extends State<Register> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CustomTextField(
-                fieldController: fullNameController,
-                fieldValidator: (value) => value!.length < 4
-                    ? "Name should be atleast 4 characters"
-                    : null,
-                label: "Full Name",
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              CustomTextField(
-                  fieldController: emailController,
-                  fieldValidator: (value) => validateEmail(value!),
-                  label: "Email Address"),
-              const SizedBox(
-                height: 20,
-              ),
-              CustomTextField(
-                fieldController: passwordController,
-                fieldValidator: (value) => value!.length < 8
-                    ? "Password should be atleast 8 characters"
-                    : null,
-                label: "Password",
-                isPassword: isObscure,
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isObscure = !isObscure;
-                    });
-                  },
-                  icon: Icon(
-                    isObscure ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.black,
-                  ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomTextField(
+                  fieldController: fullNameController,
+                  fieldValidator: (value) => value!.length < 4
+                      ? "Name should be atleast 4 characters"
+                      : null,
+                  label: "Full Name",
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              CustomTextField(
-                fieldController: confirmPasswordController,
-                fieldValidator: (value) => validateConfirmPassword(value!),
-                label: "Confirm Password",
-                isPassword: isObscure,
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isObscure = !isObscure;
-                    });
-                  },
-                  icon: Icon(
-                    isObscure ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.black,
-                  ),
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              AuthButton(
-                  onTap: _register,
-                  title: "Register",
-                  color: Color(0xff1363DF)),
-              const Divider(height: 40),
-              AuthButton(
-                  onTap: () {},
-                  title: "Register with Google",
-                  color: Colors.redAccent),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Already have an account ?"),
-                  TextButton(
+                CustomTextField(
+                    fieldController: emailController,
+                    fieldValidator: (value) => validateEmail(value!),
+                    label: "Email Address"),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomTextField(
+                  fieldController: passwordController,
+                  fieldValidator: (value) => value!.length < 8
+                      ? "Password should be atleast 8 characters"
+                      : null,
+                  label: "Password",
+                  isPassword: isObscure,
+                  suffixIcon: IconButton(
                     onPressed: () {
-                      Get.back();
+                      setState(() {
+                        isObscure = !isObscure;
+                      });
                     },
-                    child: const Text("Login"),
-                  )
-                ],
-              )
-            ],
+                    icon: Icon(
+                      isObscure ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomTextField(
+                  fieldController: confirmPasswordController,
+                  fieldValidator: (value) => validateConfirmPassword(value!),
+                  label: "Confirm Password",
+                  isPassword: isObscure,
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isObscure = !isObscure;
+                      });
+                    },
+                    icon: Icon(
+                      isObscure ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                AuthButton(
+                    onTap: _register,
+                    title: "Register",
+                    color: Color(0xff1363DF)),
+                const Divider(height: 40),
+                AuthButton(
+                    onTap: loginWithGoogle,
+                    title: "Register with Google",
+                    color: Colors.redAccent),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Already have an account ?"),
+                    TextButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: const Text("Login"),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

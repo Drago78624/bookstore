@@ -62,9 +62,9 @@ class _AddressesState extends State<Addresses> {
               }
             },
           )),
-      floatingActionButton: IconButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: _openAddAddressOverlay,
-        icon: const Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -115,6 +115,7 @@ class _AddPaymentMethodState extends State<AddPaymentMethod> {
                                 vertical: 8,
                               ),
                               decoration: const BoxDecoration(
+                                color: Color(0xff1363DF),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(8),
                                 ),
@@ -124,8 +125,7 @@ class _AddPaymentMethodState extends State<AddPaymentMethod> {
                               child: const Text(
                                 'Add',
                                 style: TextStyle(
-                                  fontSize: 14,
-                                ),
+                                    fontSize: 14, color: Colors.white),
                               ),
                             ),
                           ),
@@ -151,12 +151,13 @@ class _AddPaymentMethodState extends State<AddPaymentMethod> {
       //   'cvvCode': cvvCode,
       // };
       final paymentMethodData = PaymentMethodModel(
-        id: const Uuid().v4(),
+          id: const Uuid().v4(),
           cardNumber: cardNumber,
           expiryDate: expiryDate,
           cardHolderName: cardHolderName,
           cvvCode: cvvCode);
-      await paymentMethodsController.addPaymentMethod(paymentMethodData.toMap());
+      await paymentMethodsController
+          .addPaymentMethod(paymentMethodData.toMap());
       Navigator.pop(context); // Close the page after adding
     } else {
       print('invalid!');

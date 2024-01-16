@@ -17,16 +17,20 @@ class PaymentMethods extends StatelessWidget {
       appBar: AppBar(title: const Text("Payment Methods")),
       body: Obx(
         () => paymentMethodsController.paymentMethods.length > 0
-            ? ListView.builder(
-                itemCount: paymentMethodsController.paymentMethods.length,
-                itemBuilder: (context, index) => PaymentMethodCard(
-                  paymentMethod: paymentMethodsController.paymentMethods[index],
-                  onRemove: (index) async {
-                    await paymentMethodsController.removePaymentMethod(
-                        // Get the ID of the payment method to be removed
-                        paymentMethodsController.paymentMethods[index]['id']);
-                  },
-                  index: index,
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  itemCount: paymentMethodsController.paymentMethods.length,
+                  itemBuilder: (context, index) => PaymentMethodCard(
+                    paymentMethod:
+                        paymentMethodsController.paymentMethods[index],
+                    onRemove: (index) async {
+                      await paymentMethodsController.removePaymentMethod(
+                          // Get the ID of the payment method to be removed
+                          paymentMethodsController.paymentMethods[index]['id']);
+                    },
+                    index: index,
+                  ),
                 ),
               )
             : Center(child: CustomHeading("No payment methods added yet")),

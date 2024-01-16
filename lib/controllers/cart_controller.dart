@@ -40,6 +40,7 @@ class CartController extends GetxController {
       _books[book] = 1;
     }
     final docRef = collection.doc(user!.uid).collection('items').doc(book.id);
+    print(docRef);
     await docRef.set({
       "title": book.title,
       "price": book.price,

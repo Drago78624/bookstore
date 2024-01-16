@@ -15,8 +15,9 @@ Future<void> main() async {
       projectId: "bookstore-6e367",
     ),
   );
-  Get.put(CartController());
-  Get.put(PaymentMethodsController());
-  runApp(const BookStoreApp(),
+  Get.lazyPut(() => CartController());
+  Get.lazyPut(() => PaymentMethodsController());
+  runApp(
+    const BookStoreApp(),
   );
 }
