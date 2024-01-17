@@ -1,6 +1,7 @@
 import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/models/user.dart';
 import 'package:bookstore/screens/addresses.dart';
+import 'package:bookstore/screens/admin_panel.dart';
 import 'package:bookstore/screens/payment_methods.dart';
 import 'package:bookstore/screens/wishlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,12 +36,12 @@ class _UserProfileState extends State<UserProfile> {
         for (var docSnapshot in querySnapshot.docs) {
           final data = docSnapshot.data();
           userData = UserModel(
-            userId: data["uid"],
-            name: data["fullName"],
-            email: data["email"],
-            addresses: data["addresses"],
-            paymentMethods: data["paymentMethods"],
-          );
+              userId: data["uid"],
+              name: data["fullName"],
+              email: data["email"],
+              addresses: data["addresses"],
+              paymentMethods: data["paymentMethods"],
+              isAdmin: data["admin"] ?? false);
         }
         setState(() {});
       },
@@ -84,6 +85,25 @@ class _UserProfileState extends State<UserProfile> {
             Expanded(
               child: Column(
                 children: [
+                  if (userData!.isAdmin)
+                    TextButton(
+                      onPressed: () {
+                        Get.to(AdminPanel());
+                      },
+                      child: const Row(
+                        children: [
+                          Text(
+                            "Admin Panel",
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          Spacer(),
+                          Icon(Icons.arrow_forward),
+                        ],
+                      ),
+                    ),
+                  const Divider(),
                   TextButton(
                     onPressed: () {
                       Get.to(Wishlist(

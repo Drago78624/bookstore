@@ -1,4 +1,5 @@
 import 'package:bookstore/book_store_app.dart';
+import 'package:bookstore/controllers/admin/users_controller.dart';
 import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/controllers/payment_methods_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +18,7 @@ Future<void> main() async {
   );
   Get.lazyPut(() => CartController());
   Get.lazyPut(() => PaymentMethodsController());
+  Get.lazyPut(() => UserController());
   runApp(
     const BookStoreApp(),
   );

@@ -1,4 +1,5 @@
 import 'package:bookstore/controllers/cart_controller.dart';
+// import 'package:bookstore/controllers/reviews_controller.dart';
 import 'package:bookstore/db.dart';
 import 'package:bookstore/models/cart_book.dart';
 import 'package:bookstore/widgets/custom_heading.dart';
@@ -21,8 +22,19 @@ class BookDetails extends StatefulWidget {
 
 class _BookDetailsState extends State<BookDetails> {
   final cartController = Get.put(CartController());
+  // late BookReviewsController bookReviewsController; // Declare the controller
+
   Map<String, dynamic> bookData = {};
   bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // bookReviewsController = Get.put(BookReviewsController(),
+    //     tag: widget.bookId); // Initialize in initState
+    getBookDetails();
+    // bookReviewsController.fetchReviews(bookId: widget.bookId);
+  }
 
   getBookDetails() async {
     loading = true;
@@ -54,12 +66,6 @@ class _BookDetailsState extends State<BookDetails> {
     };
     await db.collection("wishlist").add(data).then((documentSnapshot) =>
         print("Added Data with ID: ${documentSnapshot.id}"));
-  }
-
-  @override
-  void initState() {
-    getBookDetails();
-    super.initState();
   }
 
   @override
@@ -117,7 +123,7 @@ class _BookDetailsState extends State<BookDetails> {
                         color: Colors.amber,
                       ),
                       onRatingUpdate: (rating) {
-                        print(rating);
+                        // Handle rating submission if needed
                       },
                     ),
                     const SizedBox(
@@ -140,6 +146,22 @@ class _BookDetailsState extends State<BookDetails> {
                     ),
                     const SizedBox(
                       height: 30,
+                    ),
+                    // Obx(() => Column(
+                    //       children: [
+                    //         ...bookReviewsController.reviews.value
+                    //             .map((review) => ReviewCard(review))
+                    //             .toList(),
+                    //         if (FirebaseAuth.instance.currentUser != null)
+                    //           ElevatedButton(
+                    //             onPressed: () => Get.toNamed('/addReview',
+                    //                 arguments: widget.bookId),
+                    //             child: const Text('Write a Review'),
+                    //           ),
+                    //       ],
+                    //     )),
+                    SizedBox(
+                      height: 20,
                     ),
                     if (FirebaseAuth.instance.currentUser != null)
                       Row(
@@ -178,3 +200,38 @@ class _BookDetailsState extends State<BookDetails> {
     );
   }
 }
+
+// class ReviewCard extends StatelessWidget {
+//   final Review review;
+
+//   const ReviewCard(this.review);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       child: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text(review.userId,
+//                 style: const TextStyle(fontWeight: FontWeight.bold)),
+//             const SizedBox(height: 8),
+//             RatingBarIndicator(
+//               rating: review.rating,
+//               itemCount: 5,
+//               itemSize: 20,
+//               direction: Axis.horizontal,
+//               itemBuilder: (context, _) => const Icon(
+//                 Icons.star,
+//                 color: Colors.amber,
+//               ), // Provide itemBuilder to display stars
+//             ),
+//             const SizedBox(height: 8),
+//             Text(review.reviewText),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
