@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -29,6 +30,11 @@ class UserController extends GetxController {
 
   Future<void> addUser(User user) async {
     try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: user.email,
+        password: user.password!, // Ensure password is not null
+      );
+
       await _usersCollection.add(user.toJson());
       _users.add(user);
       update();
@@ -40,6 +46,17 @@ class UserController extends GetxController {
   Future<void> updateUser(User updatedUser) async {
     try {
       final docId = updatedUser.id;
+      if (updatedUser.email.isNotEmpty &&
+          updatedUser.email != FirebaseAuth.instance.currentUser!.email) {
+        // Update email in Firebase Authentication
+        await FirebaseAuth.instance.currentUser!.updateEmail(updatedUser.email);
+      }
+
+      // Check if the user's password needs to be updated (as before)
+      if (updatedUser.password != null && updatedUser.password!.isNotEmpty) {
+        await FirebaseAuth.instance.currentUser!
+            .updatePassword(updatedUser.password!);
+      }
       await _usersCollection.doc(docId).update(updatedUser.toJson());
       final index = _users.indexWhere((user) => user.id == docId);
       if (index != -1) {

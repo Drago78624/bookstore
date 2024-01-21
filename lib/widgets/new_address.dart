@@ -3,7 +3,7 @@ import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-final _formKey = GlobalKey<FormState>();
+final _newAddressFormKey = GlobalKey<FormState>();
 
 class NewAddress extends StatefulWidget {
   const NewAddress({super.key});
@@ -16,7 +16,7 @@ class _NewAddressState extends State<NewAddress> {
   final TextEditingController addressController = TextEditingController();
 
   void addAddress() async {
-    if (_formKey.currentState!.validate()) {
+    if (_newAddressFormKey.currentState!.validate()) {
       final data = {
         "uid": FirebaseAuth.instance.currentUser!.uid,
         "address": addressController.text
@@ -51,7 +51,7 @@ class _NewAddressState extends State<NewAddress> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Form(
-              key: _formKey,
+              key: _newAddressFormKey,
               child: CustomTextField(
                   fieldController: addressController,
                   fieldValidator: (value) => value!.length < 8

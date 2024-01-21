@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:getwidget/getwidget.dart';
 
-final _formKey = GlobalKey<FormState>();
+final _loginFormKey = GlobalKey<FormState>();
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -98,7 +98,7 @@ class _LoginState extends State<Login> {
   }
 
   void _login() async {
-    if (_formKey.currentState!.validate()) {
+    if (_loginFormKey.currentState!.validate()) {
       setState(() {
         loading = true;
       });
@@ -111,7 +111,7 @@ class _LoginState extends State<Login> {
           loading = false;
         });
         Get.put(CartController());
-          Get.put(PaymentMethodsController());
+        Get.put(PaymentMethodsController());
         Get.toNamed('/root');
       } on FirebaseAuthException catch (ex) {
         print(ex.code);
@@ -163,71 +163,73 @@ class _LoginState extends State<Login> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CustomTextField(
-                  fieldController: emailController,
-                  fieldValidator: (value) => validateEmail(value!),
-                  label: "Email Address"),
-              const SizedBox(
-                height: 20,
-              ),
-              CustomTextField(
-                fieldController: passwordController,
-                fieldValidator: (value) => value!.length < 8
-                    ? "Password should be atleast 8 characters"
-                    : null,
-                label: "Password",
-                isPassword: isObscure,
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isObscure = !isObscure;
-                    });
-                  },
-                  icon: Icon(
-                    isObscure ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.black,
+          key: _loginFormKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomTextField(
+                    fieldController: emailController,
+                    fieldValidator: (value) => validateEmail(value!),
+                    label: "Email Address"),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomTextField(
+                  fieldController: passwordController,
+                  fieldValidator: (value) => value!.length < 8
+                      ? "Password should be atleast 8 characters"
+                      : null,
+                  label: "Password",
+                  isPassword: isObscure,
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isObscure = !isObscure;
+                      });
+                    },
+                    icon: Icon(
+                      isObscure ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              AuthButton(
-                  onTap: _login, title: "Login", color: Color(0xff1363DF)),
-              const Divider(height: 40),
-              AuthButton(
-                  onTap: loginWithGoogle,
-                  title: "Login with Google",
-                  color: Colors.redAccent),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Don't have an account ?"),
-                  TextButton(
-                    onPressed: () {
-                      Get.toNamed('/register');
-                    },
-                    child: const Text("Register"),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.toNamed('/forgot-password');
-                },
-                child: Text("Forgot Password?"),
-              )
-            ],
+                const SizedBox(
+                  height: 20,
+                ),
+                AuthButton(
+                    onTap: _login, title: "Login", color: Color(0xff1363DF)),
+                const Divider(height: 40),
+                AuthButton(
+                    onTap: loginWithGoogle,
+                    title: "Login with Google",
+                    color: Colors.redAccent),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Don't have an account ?"),
+                    TextButton(
+                      onPressed: () {
+                        Get.toNamed('/register');
+                      },
+                      child: const Text("Register"),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Get.toNamed('/forgot-password');
+                  },
+                  child: Text("Forgot Password?"),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -84,8 +84,7 @@ class _WishlistState extends State<Wishlist> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListTile(
-                        leading: Image.network(
-                            'https://cors-anywhere.herokuapp.com/${wishlistBook.coverImageUrl!}'),
+                        leading: Image.network(wishlistBook.coverImageUrl!),
                         title: Text(wishlistBook.title),
                         subtitle: Text("\$${wishlistBook.price}"),
                       ),

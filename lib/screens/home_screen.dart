@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-            SizedBox(height: 200 ,child: LatestBooks(onTap: widget.onTap)),
+            SizedBox(height: 200, child: LatestBooks(onTap: widget.onTap)),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-            SizedBox(height: 200 ,child: PopularBooks(onTap: widget.onTap)),
+            SizedBox(height: 200, child: PopularBooks(onTap: widget.onTap)),
           ],
         ),
       ),

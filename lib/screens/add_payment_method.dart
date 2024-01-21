@@ -5,7 +5,7 @@ import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-final GlobalKey<FormState> _paymentMethodFormKey = GlobalKey<FormState>();
+final _paymentMethodFormKey = GlobalKey<FormState>();
 
 class AddPaymentMethod extends StatefulWidget {
   const AddPaymentMethod({super.key});

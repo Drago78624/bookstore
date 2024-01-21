@@ -83,17 +83,38 @@ class _UserProfileState extends State<UserProfile> {
               height: 20,
             ),
             Expanded(
-              child: Column(
-                children: [
-                  if (userData!.isAdmin)
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    if (userData!.isAdmin)
+                      TextButton(
+                        onPressed: () {
+                          Get.to(AdminPanel());
+                        },
+                        child: const Row(
+                          children: [
+                            Text(
+                              "Admin Panel",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                            Spacer(),
+                            Icon(Icons.arrow_forward),
+                          ],
+                        ),
+                      ),
+                    const Divider(),
                     TextButton(
                       onPressed: () {
-                        Get.to(AdminPanel());
+                        Get.to(Wishlist(
+                          userId: userData!.userId,
+                        ));
                       },
                       child: const Row(
                         children: [
                           Text(
-                            "Admin Panel",
+                            "Wishlist",
                             style: TextStyle(
                               fontSize: 18,
                             ),
@@ -103,101 +124,82 @@ class _UserProfileState extends State<UserProfile> {
                         ],
                       ),
                     ),
-                  const Divider(),
-                  TextButton(
-                    onPressed: () {
-                      Get.to(Wishlist(
-                        userId: userData!.userId,
-                      ));
-                    },
-                    child: const Row(
-                      children: [
-                        Text(
-                          "Wishlist",
-                          style: TextStyle(
-                            fontSize: 18,
+                    const Divider(),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Row(
+                        children: [
+                          Text(
+                            "Order History",
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward),
-                      ],
+                          Spacer(),
+                          Icon(Icons.arrow_forward),
+                        ],
+                      ),
                     ),
-                  ),
-                  const Divider(),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Row(
-                      children: [
-                        Text(
-                          "Order History",
-                          style: TextStyle(
-                            fontSize: 18,
+                    const Divider(),
+                    TextButton(
+                      onPressed: () {
+                        Get.to(Addresses(uid: widget.userId));
+                      },
+                      child: const Row(
+                        children: [
+                          Text(
+                            "My Addresses",
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward),
-                      ],
+                          Spacer(),
+                          Icon(Icons.arrow_forward),
+                        ],
+                      ),
                     ),
-                  ),
-                  const Divider(),
-                  TextButton(
-                    onPressed: () {
-                      Get.to(Addresses(uid: widget.userId));
-                    },
-                    child: const Row(
-                      children: [
-                        Text(
-                          "My Addresses",
-                          style: TextStyle(
-                            fontSize: 18,
+                    Divider(),
+                    TextButton(
+                      onPressed: () {
+                        Get.to(PaymentMethods());
+                      },
+                      child: const Row(
+                        children: [
+                          Text(
+                            "Payment Methods",
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward),
-                      ],
+                          Spacer(),
+                          Icon(Icons.arrow_forward),
+                        ],
+                      ),
                     ),
-                  ),
-                  Divider(),
-                  TextButton(
-                    onPressed: () {
-                      Get.to(PaymentMethods());
-                    },
-                    child: const Row(
-                      children: [
-                        Text(
-                          "Payment Methods",
-                          style: TextStyle(
-                            fontSize: 18,
+                    const Divider(),
+                    TextButton(
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
+                        Get.offNamed('/root');
+                        widget.changeScreen(0);
+                        Get.delete<CartController>();
+                      },
+                      child: const Row(
+                        children: [
+                          Text(
+                            "Logout",
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward),
-                      ],
+                          Spacer(),
+                          Icon(Icons.arrow_forward),
+                        ],
+                      ),
                     ),
-                  ),
-                  const Divider(),
-                  TextButton(
-                    onPressed: () async {
-                      await FirebaseAuth.instance.signOut();
-                      Get.offNamed('/root');
-                      widget.changeScreen(0);
-                      Get.delete<CartController>();
-                    },
-                    child: const Row(
-                      children: [
-                        Text(
-                          "Logout",
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward),
-                      ],
-                    ),
-                  ),
-                  const Divider(),
-                ],
+                    const Divider(),
+                  ],
+                ),
               ),
             )
           ],

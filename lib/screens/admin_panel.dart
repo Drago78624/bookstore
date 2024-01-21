@@ -131,6 +131,7 @@ class _AdminPanelState extends State<AdminPanel> {
           ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
                 try {
                   await userController.addUser(_newUser);
                   Get.back(); // Close dialog on success
@@ -154,6 +155,129 @@ class UserCard extends StatelessWidget {
 
   const UserCard({required this.user});
 
+  Future<void> _showUpdateUserDialog(User userToUpdate) async {
+    final _formKey = GlobalKey<FormState>();
+    final userController = Get.find<UserController>();
+
+    User _updatedUser = userToUpdate; // Copy to avoid modifying original
+
+    return Get.dialog(
+      AlertDialog(
+        title: Text('Update User'),
+        content: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Email (allow editing for potential changes)
+              TextFormField(
+                initialValue: _updatedUser.email,
+                decoration: InputDecoration(labelText: 'Email'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Email is required';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Invalid email address';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _updatedUser.email = value!,
+              ),
+              // Full Name (allow editing)
+              TextFormField(
+                initialValue: _updatedUser.fullName,
+                decoration: InputDecoration(labelText: 'Full Name'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Full name is required';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _updatedUser.fullName = value!,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _updatedUser.addresses.length,
+                  itemBuilder: (context, index) {
+                    final address = _updatedUser.addresses[index];
+                    return TextFormField(
+                      initialValue: address,
+                      decoration:
+                          InputDecoration(labelText: 'Address ${index + 1}'),
+                      validator: (value) {
+                        // Add address validation if needed
+                        return null;
+                      },
+                      onSaved: (value) =>
+                          _updatedUser.addresses[index] = value!,
+                    );
+                  },
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _updatedUser.paymentMethods.length,
+                  itemBuilder: (context, index) {
+                    final paymentMethod = _updatedUser.paymentMethods[index];
+                    return TextFormField(
+                      initialValue: paymentMethod,
+                      decoration: InputDecoration(
+                          labelText: 'Payment Method ${index + 1}'),
+                      validator: (value) {
+                        // Add payment method validation if needed
+                        return null;
+                      },
+                      onSaved: (value) =>
+                          _updatedUser.paymentMethods[index] = value!,
+                    );
+                  },
+                ),
+              ),
+              // Password (allow optional editing for password changes)
+              TextFormField(
+                initialValue: _updatedUser.password,
+                obscureText: true,
+                decoration: InputDecoration(labelText: 'Password (optional)'),
+                validator: (value) {
+                  if (value != null && value.isNotEmpty) {
+                    // Add password strength validation if needed
+                  }
+                  return null;
+                },
+                onSaved: (value) => _updatedUser.password = value!,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                try {
+                  await userController.updateUser(_updatedUser);
+                  Get.back(); // Close dialog on success
+                  Get.snackbar('User Updated', 'User updated successfully');
+                } catch (error) {
+                  // Handle errors
+                  Get.snackbar('Error', 'Failed to update user: $error');
+                }
+              }
+            },
+            child: Text('Update'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -165,8 +289,7 @@ class UserCard extends StatelessWidget {
           children: [
             // Edit button
             IconButton(
-              // onPressed: () => _showEditUserDialog(user),
-              onPressed: () {},
+              onPressed: () => _showUpdateUserDialog(user),
               icon: Icon(Icons.edit),
             ),
             // Delete button (with admin-specific logic)

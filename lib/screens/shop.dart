@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-final _formKey = GlobalKey<FormState>();
+final _searchFormKey = GlobalKey<FormState>();
 
 final db = FirebaseFirestore.instance;
 
@@ -50,7 +50,7 @@ class _ShopState extends State<Shop> {
 
   searchResultBooks() {
     List results = [];
-    if (_formKey.currentState!.validate()) {
+    if (_searchFormKey.currentState!.validate()) {
       for (var book in allBooks) {
         String title = book["title"].toString().toLowerCase();
         List authors =
@@ -95,7 +95,7 @@ class _ShopState extends State<Shop> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
-            key: _formKey,
+            key: _searchFormKey,
             child: Column(
               children: [
                 CustomTextField(

@@ -11,7 +11,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 final db = FirebaseFirestore.instance;
 
-final _formKey = GlobalKey<FormState>();
+final _registerFormKey = GlobalKey<FormState>();
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -110,7 +110,7 @@ class _RegisterState extends State<Register> {
   }
 
   void _register() async {
-    if (_formKey.currentState!.validate()) {
+    if (_registerFormKey.currentState!.validate()) {
       setState(() {
         loading = true;
       });
@@ -179,7 +179,7 @@ class _RegisterState extends State<Register> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey,
+          key: _registerFormKey,
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,

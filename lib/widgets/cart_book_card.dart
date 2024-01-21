@@ -26,8 +26,7 @@ class CartBookCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListTile(
-          leading: Image.network(
-              'https://cors-anywhere.herokuapp.com/${book.coverImageUrl}'),
+          leading: Image.network(book.coverImageUrl),
           title: Text(book.title.replaceRange(11, book.title.length, '...')),
           subtitle: Row(
             children: [

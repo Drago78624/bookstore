@@ -12,7 +12,7 @@ class CartBook {
 
   final String id;
   final String title;
-  final double price;
+  final int price;
   final String coverImageUrl;
   final int quantity;
 

@@ -10,6 +10,6 @@ class BookCardModel {
   final String id;
   final String title;
   final String? coverImageUrl;
-  final double price;
+  final int price;
   final String? docId;
 }

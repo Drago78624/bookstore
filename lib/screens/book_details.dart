@@ -43,6 +43,7 @@ class _BookDetailsState extends State<BookDetails> {
     await docRef.get().then(
       (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
+        print(data["price"].runtimeType);
         setState(() {
           bookData = data;
         });
@@ -85,8 +86,7 @@ class _BookDetailsState extends State<BookDetails> {
                   children: [
                     Image.network(
                       bookData["thumbnailUrl"] != null
-                          ? 'https://cors-anywhere.herokuapp.com/' +
-                              bookData["thumbnailUrl"]
+                          ? bookData["thumbnailUrl"]
                           : "https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg",
                       fit: BoxFit.cover,
                     ),
@@ -112,7 +112,7 @@ class _BookDetailsState extends State<BookDetails> {
                       height: 10,
                     ),
                     RatingBar.builder(
-                      initialRating: bookData["rating"],
+                      initialRating: bookData["rating"].toDouble(),
                       minRating: 0,
                       direction: Axis.horizontal,
                       allowHalfRating: true,

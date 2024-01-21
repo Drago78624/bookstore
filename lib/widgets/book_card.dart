@@ -9,7 +9,7 @@ class BookCard extends StatelessWidget {
 
   final String title;
   final String coverImageUrl;
-  final double price;
+  final int price;
 
   // 'https://cors-anywhere.herokuapp.com/' +
 
@@ -25,7 +25,8 @@ class BookCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
-                'https://cors-anywhere.herokuapp.com/' + coverImageUrl,
+                // 'https://cors-anywhere.herokuapp.com/' + coverImageUrl,
+                coverImageUrl,
                 height: 150,
                 fit: BoxFit.cover,
               ),
@@ -38,7 +39,7 @@ class BookCard extends StatelessWidget {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Text(
-            "\$${price.toString()}",
+            "\$$price",
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
         ],
