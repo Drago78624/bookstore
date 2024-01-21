@@ -86,7 +86,7 @@ class _UserProfileState extends State<UserProfile> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    if (userData!.isAdmin)
+                    if (userData!.isAdmin) ...[
                       TextButton(
                         onPressed: () {
                           Get.to(AdminPanel());
@@ -104,79 +104,83 @@ class _UserProfileState extends State<UserProfile> {
                           ],
                         ),
                       ),
-                    const Divider(),
-                    TextButton(
-                      onPressed: () {
-                        Get.to(Wishlist(
-                          userId: userData!.userId,
-                        ));
-                      },
-                      child: const Row(
-                        children: [
-                          Text(
-                            "Wishlist",
-                            style: TextStyle(
-                              fontSize: 18,
+                      const Divider()
+                    ],
+                    if (!userData!.isAdmin) ...[
+                      const Divider(),
+                      TextButton(
+                        onPressed: () {
+                          Get.to(Wishlist(
+                            userId: userData!.userId,
+                          ));
+                        },
+                        child: const Row(
+                          children: [
+                            Text(
+                              "Wishlist",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
                             ),
-                          ),
-                          Spacer(),
-                          Icon(Icons.arrow_forward),
-                        ],
+                            Spacer(),
+                            Icon(Icons.arrow_forward),
+                          ],
+                        ),
                       ),
-                    ),
-                    const Divider(),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Row(
-                        children: [
-                          Text(
-                            "Order History",
-                            style: TextStyle(
-                              fontSize: 18,
+                      const Divider(),
+                      TextButton(
+                        onPressed: () {},
+                        child: const Row(
+                          children: [
+                            Text(
+                              "Order History",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
                             ),
-                          ),
-                          Spacer(),
-                          Icon(Icons.arrow_forward),
-                        ],
+                            Spacer(),
+                            Icon(Icons.arrow_forward),
+                          ],
+                        ),
                       ),
-                    ),
-                    const Divider(),
-                    TextButton(
-                      onPressed: () {
-                        Get.to(Addresses(uid: widget.userId));
-                      },
-                      child: const Row(
-                        children: [
-                          Text(
-                            "My Addresses",
-                            style: TextStyle(
-                              fontSize: 18,
+                      const Divider(),
+                      TextButton(
+                        onPressed: () {
+                          Get.to(Addresses(uid: widget.userId));
+                        },
+                        child: const Row(
+                          children: [
+                            Text(
+                              "My Addresses",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
                             ),
-                          ),
-                          Spacer(),
-                          Icon(Icons.arrow_forward),
-                        ],
+                            Spacer(),
+                            Icon(Icons.arrow_forward),
+                          ],
+                        ),
                       ),
-                    ),
-                    Divider(),
-                    TextButton(
-                      onPressed: () {
-                        Get.to(PaymentMethods());
-                      },
-                      child: const Row(
-                        children: [
-                          Text(
-                            "Payment Methods",
-                            style: TextStyle(
-                              fontSize: 18,
+                      Divider(),
+                      TextButton(
+                        onPressed: () {
+                          Get.to(PaymentMethods());
+                        },
+                        child: const Row(
+                          children: [
+                            Text(
+                              "Payment Methods",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
                             ),
-                          ),
-                          Spacer(),
-                          Icon(Icons.arrow_forward),
-                        ],
+                            Spacer(),
+                            Icon(Icons.arrow_forward),
+                          ],
+                        ),
                       ),
-                    ),
-                    const Divider(),
+                      const Divider(),
+                    ],
                     TextButton(
                       onPressed: () async {
                         await FirebaseAuth.instance.signOut();

@@ -147,19 +147,6 @@ class _BookDetailsState extends State<BookDetails> {
                     const SizedBox(
                       height: 30,
                     ),
-                    // Obx(() => Column(
-                    //       children: [
-                    //         ...bookReviewsController.reviews.value
-                    //             .map((review) => ReviewCard(review))
-                    //             .toList(),
-                    //         if (FirebaseAuth.instance.currentUser != null)
-                    //           ElevatedButton(
-                    //             onPressed: () => Get.toNamed('/addReview',
-                    //                 arguments: widget.bookId),
-                    //             child: const Text('Write a Review'),
-                    //           ),
-                    //       ],
-                    //     )),
                     SizedBox(
                       height: 20,
                     ),

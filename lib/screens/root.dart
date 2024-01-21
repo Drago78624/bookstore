@@ -1,5 +1,6 @@
 import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/helpers/check_auth_user.dart';
+import 'package:bookstore/helpers/get_current_userdata.dart';
 import 'package:bookstore/screens/authors.dart';
 import 'package:bookstore/screens/cart.dart';
 import 'package:bookstore/screens/categories.dart';
@@ -27,6 +28,7 @@ class _RootState extends State<Root> {
   BookFilter? filter;
   String? name;
   final cartController = Get.find<CartController>();
+  bool isUserAdmin = false;
 
   @override
   void initState() {

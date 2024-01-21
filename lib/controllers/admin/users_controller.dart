@@ -44,25 +44,19 @@ class UserController extends GetxController {
   }
 
   Future<void> updateUser(User updatedUser) async {
+    print(updatedUser.toJson());
+
     try {
       final docId = updatedUser.id;
-      if (updatedUser.email.isNotEmpty &&
-          updatedUser.email != FirebaseAuth.instance.currentUser!.email) {
-        // Update email in Firebase Authentication
-        await FirebaseAuth.instance.currentUser!.updateEmail(updatedUser.email);
-      }
-
-      // Check if the user's password needs to be updated (as before)
-      if (updatedUser.password != null && updatedUser.password!.isNotEmpty) {
-        await FirebaseAuth.instance.currentUser!
-            .updatePassword(updatedUser.password!);
-      }
       await _usersCollection.doc(docId).update(updatedUser.toJson());
       final index = _users.indexWhere((user) => user.id == docId);
       if (index != -1) {
         _users[index] = updatedUser;
         update();
       }
+      await FirebaseAuth.instance.currentUser!.updateEmail(updatedUser.email);
+      await FirebaseAuth.instance.currentUser!
+          .updatePassword(updatedUser.password!);
     } catch (error) {
       // Handle errors appropriately
     }
