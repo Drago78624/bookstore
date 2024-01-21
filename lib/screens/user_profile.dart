@@ -1,7 +1,8 @@
 import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/models/user.dart';
 import 'package:bookstore/screens/addresses.dart';
-import 'package:bookstore/screens/admin_panel.dart';
+import 'package:bookstore/screens/admin/books_panel.dart';
+import 'package:bookstore/screens/admin/users_panel.dart';
 import 'package:bookstore/screens/payment_methods.dart';
 import 'package:bookstore/screens/wishlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -89,12 +90,30 @@ class _UserProfileState extends State<UserProfile> {
                     if (userData!.isAdmin) ...[
                       TextButton(
                         onPressed: () {
-                          Get.to(AdminPanel());
+                          Get.to(UsersPanel());
                         },
                         child: const Row(
                           children: [
                             Text(
-                              "Admin Panel",
+                              "Users",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                            Spacer(),
+                            Icon(Icons.arrow_forward),
+                          ],
+                        ),
+                      ),
+                      const Divider(),
+                      TextButton(
+                        onPressed: () {
+                          Get.to(BooksPanel());
+                        },
+                        child: const Row(
+                          children: [
+                            Text(
+                              "Books",
                               style: TextStyle(
                                 fontSize: 18,
                               ),

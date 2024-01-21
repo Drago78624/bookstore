@@ -3,20 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AdminPanel extends StatefulWidget {
-  const AdminPanel({super.key});
+class UsersPanel extends StatefulWidget {
+  const UsersPanel({super.key});
 
   @override
-  State<AdminPanel> createState() => _AdminPanelState();
+  State<UsersPanel> createState() => _UsersPanelState();
 }
 
-class _AdminPanelState extends State<AdminPanel> {
+class _UsersPanelState extends State<UsersPanel> {
   final UserController userController = Get.put(UserController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Management'),
+        title: Text('Users Management'),
       ),
       body: Obx(
         () => ListView.builder(
