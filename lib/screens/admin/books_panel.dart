@@ -24,140 +24,163 @@ class _BooksPanelState extends State<BooksPanel> {
           itemCount: bookController.books.length,
           itemBuilder: (context, index) {
             final book = bookController.books[index];
-            print(book);
             return BookCard(book: book);
           },
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        // onPressed: () => _showAddUserDialog(),
-        onPressed: () {},
+        onPressed: () => _showAddBookDialog(),
+        // onPressed: () {},
         child: Icon(Icons.add),
       ),
     );
   }
 
-//   Future<void> _showAddUserDialog() async {
-//     final _formKey = GlobalKey<FormState>();
-//     final bookController = Get.find<BooksController>();
+  Future<void> _showAddBookDialog() async {
+    final _formKey = GlobalKey<FormState>();
+    final bookController =
+        Get.find<BooksController>(); // Assuming a BookController exists
 
-//     Book _newBook = Book(
-//       id: "",
-//       authors: [],
-//       categories: [],
-//       isbn: "",
-//       longDescription: "",
-//       pageCount: 0,
-//       price: 0,
-//       publishedDate: {},
-//       rating: 0,
-//       shortDescription: "",
-//       thumbnailUrl: "",
-//       title: "",
-//     );
+    Book _newBook = Book(
+      id: "",
+      authors: [],
+      categories: [],
+      isbn: "",
+      longDescription: "",
+      pageCount: 0,
+      price: 0,
+      publishedDate: {},
+      rating: 0,
+      shortDescription: "",
+      thumbnailUrl: "",
+      title: "",
+    );
 
-//     return Get.dialog(
-//       AlertDialog(
-//         title: Text('Add User'),
-//         content: Form(
-//           key: _formKey,
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               TextFormField(
-//                 initialValue: _newUser.email, // Use initialValue for editing
-//                 decoration: InputDecoration(labelText: 'Email'),
-//                 validator: (value) {
-//                   if (value == null || value.isEmpty) {
-//                     return 'Email is required';
-//                   }
-//                   if (!value.contains('@')) {
-//                     return 'Invalid email address';
-//                   }
-//                   return null;
-//                 },
-//                 onSaved: (value) => _newUser.email = value!,
-//               ),
-//               TextFormField(
-//                 initialValue: _newUser.fullName,
-//                 decoration: InputDecoration(labelText: 'Full Name'),
-//                 validator: (value) {
-//                   if (value == null || value.isEmpty) {
-//                     return 'Full name is required';
-//                   }
-//                   return null;
-//                 },
-//                 onSaved: (value) => _newUser.fullName = value!,
-//               ),
-//               // Addresses (consider using a list builder for multiple fields)
-//               TextFormField(
-//                 initialValue: _newUser.addresses
-//                     .join(', '), // Combine addresses for display
-//                 decoration: InputDecoration(labelText: 'Addresses'),
-//                 validator: (value) {
-//                   if (value == null || value.isEmpty) {
-//                     return 'At least one address is required';
-//                   }
-//                   return null;
-//                 },
-//                 onSaved: (value) =>
-//                     _newUser.addresses = value!.split(', '), // Split into list
-//               ),
-//               // Payment Methods (consider using a list builder or dropdown)
-//               TextFormField(
-//                 initialValue:
-//                     _newUser.paymentMethods.join(', '), // Combine for display
-//                 decoration: InputDecoration(labelText: 'Payment Methods'),
-//                 validator: (value) {
-//                   // Add validation if needed, e.g., ensuring specific formats
-//                   return null;
-//                 },
-//                 onSaved: (value) => _newUser.paymentMethods =
-//                     value!.split(', '), // Split into list
-//               ),
-//               // Password (consider using a secure input widget)
-//               TextFormField(
-//                 initialValue: _newUser.password,
-//                 obscureText: true,
-//                 decoration: InputDecoration(labelText: 'Password'),
-//                 validator: (value) {
-//                   if (value == null || value.isEmpty) {
-//                     return 'Password is required';
-//                   }
-//                   // Add additional password strength validation if needed
-//                   return null;
-//                 },
-//                 onSaved: (value) => _newUser.password = value!,
-//               ),
-//             ],
-//           ),
-//         ),
-//         actions: [
-//           TextButton(
-//             onPressed: () => Get.back(),
-//             child: Text('Cancel'),
-//           ),
-//           ElevatedButton(
-//             onPressed: () async {
-//               if (_formKey.currentState!.validate()) {
-//                 _formKey.currentState!.save();
-//                 try {
-//                   await bookController.addUser(_newUser);
-//                   Get.back(); // Close dialog on success
-//                   Get.snackbar('User Added', 'User added successfully');
-//                 } catch (error) {
-//                   // Handle errors
-//                   Get.snackbar('Error', 'Failed to add user: $error');
-//                 }
-//               }
-//             },
-//             child: Text('Add'),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+    return Get.dialog(
+      AlertDialog(
+        title: Text('Add Book'),
+        content: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  initialValue: _newBook.title,
+                  decoration: InputDecoration(labelText: 'Title'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Title is required';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _newBook.title = value!,
+                ),
+                // ... Add TextFormFields for other book fields as needed
+                TextFormField(
+                  initialValue:
+                      _newBook.authors.join(", "), // Assuming a list of authors
+                  decoration: InputDecoration(labelText: 'Authors'),
+                  onSaved: (value) => _newBook.authors = value!.split(","),
+                ),
+                TextFormField(
+                  initialValue: _newBook.isbn,
+                  decoration: InputDecoration(labelText: 'ISBN'),
+                  validator: (value) {
+                    // Add ISBN validation if needed
+                    return null;
+                  },
+                  onSaved: (value) => _newBook.isbn = value!,
+                ),
+                TextFormField(
+                  initialValue: _newBook.pageCount.toString(),
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Page Count'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Page count is required';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _newBook.pageCount = int.parse(value!),
+                ),
+                TextFormField(
+                  initialValue: _newBook.price.toString(),
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Price'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Price is required';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _newBook.price = int.parse(value!),
+                ),
+                // TextFormField(
+                //   initialValue: _newBook.publishedDate.toString(), // Implement a way to set date
+                //   decoration: InputDecoration(labelText: 'Published Date'),
+                //   onSaved: (value) => _newBook.publishedDate = DateTime.parse(value!), // Parse date correctly
+                // ),
+                // Consider using a rating bar for rating
+                // Consider using an image picker for thumbnailUrl
+                TextFormField(
+                  initialValue: _newBook.shortDescription,
+                  decoration: InputDecoration(labelText: 'Short Description'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Short description is required';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _newBook.shortDescription = value!,
+                ),
+                TextFormField(
+                  initialValue: _newBook.longDescription,
+                  decoration: InputDecoration(labelText: 'Long Description'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Long description is required';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _newBook.longDescription = value!,
+                ),
+                TextFormField(
+                  initialValue: _newBook.thumbnailUrl,
+                  decoration: InputDecoration(labelText: 'Thumbnail URL'),
+                  // Implement thumbnail upload or selection here
+                  onSaved: (value) => _newBook.thumbnailUrl = value!,
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                try {
+                  await bookController
+                      .addBook(_newBook); // Assuming a method in BookController
+                  Get.back(); // Close dialog on success
+                  Get.snackbar('Book Added', 'Book added successfully');
+                } catch (error) {
+                  // Handle errors
+                  Get.snackbar('Error', 'Failed to add book: $error');
+                }
+              }
+            },
+            child: Text('Add'),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class BookCard extends StatelessWidget {
@@ -305,7 +328,7 @@ class BookCard extends StatelessWidget {
             ),
             // Delete button (with admin-specific logic)
             IconButton(
-              onPressed: () => _confirmDeleteUser(book),
+              onPressed: () => _confirmDeleteBook(book),
               icon: Icon(Icons.delete),
             ),
           ],
@@ -314,11 +337,11 @@ class BookCard extends StatelessWidget {
     );
   }
 
-  Future<void> _confirmDeleteUser(Book book) async {
+  Future<void> _confirmDeleteBook(Book book) async {
     final bookController = Get.find<BooksController>();
     return Get.dialog(
       AlertDialog(
-        title: Text('Delete User'),
+        title: Text('Delete Book'),
         content: Text('Are you sure you want to delete ${book.title}?'),
         actions: [
           TextButton(
@@ -330,9 +353,9 @@ class BookCard extends StatelessWidget {
               try {
                 await bookController.deleteBook(book.id);
                 Get.back(); // Close dialog on success
-                Get.snackbar('User Deleted', 'User deleted successfully');
+                Get.snackbar('Book Deleted', 'Book deleted successfully');
               } catch (error) {
-                Get.snackbar('Error', 'Failed to delete user: $error');
+                Get.snackbar('Error', 'Failed to delete book: $error');
               }
             },
             child: Text('Delete'),

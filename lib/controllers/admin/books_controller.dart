@@ -65,29 +65,29 @@ class BooksController extends GetxController {
 
 class Book {
   String id;
-  final List<String> authors;
-  final List<String> categories;
-  final String isbn;
-  // final String longDescription;
-  final int pageCount;
-  final int price;
-  final Map<String, String> publishedDate;
-  // final int rating;
-  // final String shortDescription;
-  final String thumbnailUrl;
-  final String title;
+  List<String> authors;
+  List<String> categories;
+  String isbn;
+  String? longDescription;
+  int pageCount;
+  int price;
+  Map<String, String> publishedDate;
+  int rating;
+  String? shortDescription;
+  String thumbnailUrl;
+  String title;
 
   Book({
     required this.id,
     required this.authors,
     required this.categories,
     required this.isbn,
-    // required this.longDescription,
+    this.longDescription,
     required this.pageCount,
     required this.price,
     required this.publishedDate,
-    // required this.rating,
-    // required this.shortDescription,
+    required this.rating,
+    this.shortDescription,
     required this.thumbnailUrl,
     required this.title,
   });
@@ -96,12 +96,12 @@ class Book {
         'authors': authors,
         'categories': categories,
         'isbn': isbn,
-        // 'longDescription': longDescription,
+        'longDescription': longDescription,
         'pageCount': pageCount,
         'price': price,
         'publishedDate': publishedDate,
-        // 'rating': rating,
-        // 'shortDescription': shortDescription,
+        'rating': rating,
+        'shortDescription': shortDescription,
         'thumbnailUrl': thumbnailUrl,
         'title': title,
       };
@@ -112,12 +112,12 @@ class Book {
       authors: List<String>.from(doc.get('authors') as List),
       categories: List<String>.from(doc.get('categories') as List),
       isbn: doc.get('isbn') as String,
-      // longDescription: doc.get('longDescription') as String,
+      longDescription: doc.get('longDescription'),
       pageCount: doc.get('pageCount'),
       price: doc.get('price'),
       publishedDate: Map<String, String>.from(doc.get('publishedDate') as Map),
-      // rating: doc.get('rating'),
-      // shortDescription: doc.get('shortDescription') ?? "",
+      rating: doc.get('rating').toInt(),
+      shortDescription: doc.get('shortDescription'),
       thumbnailUrl: doc.get('thumbnailUrl') as String,
       title: doc.get('title') as String,
     );

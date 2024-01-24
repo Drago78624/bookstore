@@ -81,31 +81,6 @@ class _UsersPanelState extends State<UsersPanel> {
                 onSaved: (value) => _newUser.fullName = value!,
               ),
               // Addresses (consider using a list builder for multiple fields)
-              TextFormField(
-                initialValue: _newUser.addresses
-                    .join(', '), // Combine addresses for display
-                decoration: InputDecoration(labelText: 'Addresses'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'At least one address is required';
-                  }
-                  return null;
-                },
-                onSaved: (value) =>
-                    _newUser.addresses = value!.split(', '), // Split into list
-              ),
-              // Payment Methods (consider using a list builder or dropdown)
-              TextFormField(
-                initialValue:
-                    _newUser.paymentMethods.join(', '), // Combine for display
-                decoration: InputDecoration(labelText: 'Payment Methods'),
-                validator: (value) {
-                  // Add validation if needed, e.g., ensuring specific formats
-                  return null;
-                },
-                onSaved: (value) => _newUser.paymentMethods =
-                    value!.split(', '), // Split into list
-              ),
               // Password (consider using a secure input widget)
               TextFormField(
                 initialValue: _newUser.password,
@@ -196,46 +171,7 @@ class UserCard extends StatelessWidget {
                 },
                 onSaved: (value) => _updatedUser.fullName = value!,
               ),
-              Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _updatedUser.addresses.length,
-                  itemBuilder: (context, index) {
-                    final address = _updatedUser.addresses[index];
-                    return TextFormField(
-                      initialValue: address,
-                      decoration:
-                          InputDecoration(labelText: 'Address ${index + 1}'),
-                      validator: (value) {
-                        // Add address validation if needed
-                        return null;
-                      },
-                      onSaved: (value) =>
-                          _updatedUser.addresses[index] = value!,
-                    );
-                  },
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _updatedUser.paymentMethods.length,
-                  itemBuilder: (context, index) {
-                    final paymentMethod = _updatedUser.paymentMethods[index];
-                    return TextFormField(
-                      initialValue: paymentMethod,
-                      decoration: InputDecoration(
-                          labelText: 'Payment Method ${index + 1}'),
-                      validator: (value) {
-                        // Add payment method validation if needed
-                        return null;
-                      },
-                      onSaved: (value) =>
-                          _updatedUser.paymentMethods[index] = value!,
-                    );
-                  },
-                ),
-              ),
+
               // Password (allow optional editing for password changes)
               TextFormField(
                 initialValue: _updatedUser.password,
