@@ -6,6 +6,7 @@ import 'package:bookstore/widgets/custom_heading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -111,20 +112,23 @@ class _BookDetailsState extends State<BookDetails> {
                     const SizedBox(
                       height: 10,
                     ),
-                    RatingBar.builder(
-                      initialRating: bookData["rating"].toDouble(),
-                      minRating: 0,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
+                    IgnorePointer(
+                      child: RatingBar.builder(
+                        initialRating: bookData["rating"].toDouble(),
+                        minRating: 0,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {
+                          // Handle rating submission if needed
+                        },
                       ),
-                      onRatingUpdate: (rating) {
-                        // Handle rating submission if needed
-                      },
                     ),
                     const SizedBox(
                       height: 10,
