@@ -188,128 +188,135 @@ class BookCard extends StatelessWidget {
 
   const BookCard({required this.book});
 
-  // Future<void> _showUpdateUserDialog(User userToUpdate) async {
-  //   final _formKey = GlobalKey<FormState>();
-  //   final bookController = Get.find<BooksController>();
+  Future<void> _showUpdateBookDialog(Book bookToUpdate) async {
+    final _formKey = GlobalKey<FormState>();
+    final bookController = Get.find<BooksController>();
 
-  //   Book _updatedBook = bookToUpdate; // Copy to avoid modifying original
+    Book _updatedBook = bookToUpdate; // Copy to avoid modifying original
 
-  //   return Get.dialog(
-  //     AlertDialog(
-  //       title: Text('Update Book'),
-  //       content: Form(
-  //         key: _formKey,
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             // Email (allow editing for potential changes)
-  //             TextFormField(
-  //               initialValue: _updatedBook.email,
-  //               decoration: InputDecoration(labelText: 'Email'),
-  //               validator: (value) {
-  //                 if (value == null || value.isEmpty) {
-  //                   return 'Email is required';
-  //                 }
-  //                 if (!value.contains('@')) {
-  //                   return 'Invalid email address';
-  //                 }
-  //                 return null;
-  //               },
-  //               onSaved: (value) => _updatedUser.email = value!,
-  //             ),
-  //             // Full Name (allow editing)
-  //             TextFormField(
-  //               initialValue: _updatedUser.fullName,
-  //               decoration: InputDecoration(labelText: 'Full Name'),
-  //               validator: (value) {
-  //                 if (value == null || value.isEmpty) {
-  //                   return 'Full name is required';
-  //                 }
-  //                 return null;
-  //               },
-  //               onSaved: (value) => _updatedUser.fullName = value!,
-  //             ),
-  //             Expanded(
-  //               child: ListView.builder(
-  //                 shrinkWrap: true,
-  //                 itemCount: _updatedUser.addresses.length,
-  //                 itemBuilder: (context, index) {
-  //                   final address = _updatedUser.addresses[index];
-  //                   return TextFormField(
-  //                     initialValue: address,
-  //                     decoration:
-  //                         InputDecoration(labelText: 'Address ${index + 1}'),
-  //                     validator: (value) {
-  //                       // Add address validation if needed
-  //                       return null;
-  //                     },
-  //                     onSaved: (value) =>
-  //                         _updatedUser.addresses[index] = value!,
-  //                   );
-  //                 },
-  //               ),
-  //             ),
-  //             Expanded(
-  //               child: ListView.builder(
-  //                 shrinkWrap: true,
-  //                 itemCount: _updatedUser.paymentMethods.length,
-  //                 itemBuilder: (context, index) {
-  //                   final paymentMethod = _updatedUser.paymentMethods[index];
-  //                   return TextFormField(
-  //                     initialValue: paymentMethod,
-  //                     decoration: InputDecoration(
-  //                         labelText: 'Payment Method ${index + 1}'),
-  //                     validator: (value) {
-  //                       // Add payment method validation if needed
-  //                       return null;
-  //                     },
-  //                     onSaved: (value) =>
-  //                         _updatedUser.paymentMethods[index] = value!,
-  //                   );
-  //                 },
-  //               ),
-  //             ),
-  //             // Password (allow optional editing for password changes)
-  //             TextFormField(
-  //               initialValue: _updatedUser.password,
-  //               obscureText: true,
-  //               decoration: InputDecoration(labelText: 'Password (optional)'),
-  //               validator: (value) {
-  //                 if (value != null && value.isNotEmpty) {
-  //                   // Add password strength validation if needed
-  //                 }
-  //                 return null;
-  //               },
-  //               onSaved: (value) => _updatedUser.password = value!,
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () => Get.back(),
-  //           child: Text('Cancel'),
-  //         ),
-  //         ElevatedButton(
-  //           onPressed: () async {
-  //             if (_formKey.currentState!.validate()) {
-  //               _formKey.currentState!.save();
-  //               try {
-  //                 await bookController.updateUser(_updatedUser);
-  //                 Get.back(); // Close dialog on success
-  //                 Get.snackbar('User Updated', 'User updated successfully');
-  //               } catch (error) {
-  //                 // Handle errors
-  //                 Get.snackbar('Error', 'Failed to update user: $error');
-  //               }
-  //             }
-  //           },
-  //           child: Text('Update'),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+    return Get.dialog(
+      AlertDialog(
+        title: Text('Update Book'),
+        content: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  initialValue: _updatedBook.title,
+                  decoration: InputDecoration(labelText: 'Title'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Title is required';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _updatedBook.title = value!,
+                ),
+                TextFormField(
+                  initialValue: _updatedBook.authors.join(", "),
+                  decoration: InputDecoration(labelText: 'Authors'),
+                  onSaved: (value) => _updatedBook.authors = value!.split(","),
+                ),
+                TextFormField(
+                  initialValue: _updatedBook.isbn,
+                  decoration: InputDecoration(labelText: 'ISBN'),
+                  validator: (value) {
+                    // Add ISBN validation if needed
+                    return null;
+                  },
+                  onSaved: (value) => _updatedBook.isbn = value!,
+                ),
+                TextFormField(
+                  initialValue: _updatedBook.pageCount.toString(),
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Page Count'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Page count is required';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) =>
+                      _updatedBook.pageCount = int.parse(value!),
+                ),
+                TextFormField(
+                  initialValue: _updatedBook.price.toString(),
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Price'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Price is required';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _updatedBook.price = int.parse(value!),
+                ),
+                // TextFormField(
+                //   initialValue: _newBook.publishedDate.toString(), // Implement a way to set date
+                //   decoration: InputDecoration(labelText: 'Published Date'),
+                //   onSaved: (value) => _newBook.publishedDate = DateTime.parse(value!), // Parse date correctly
+                // ),
+                // Consider using a rating bar for rating
+                // Consider using an image picker for thumbnailUrl
+                TextFormField(
+                  initialValue: _updatedBook.shortDescription,
+                  decoration: InputDecoration(labelText: 'Short Description'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Short description is required';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _updatedBook.shortDescription = value!,
+                ),
+                TextFormField(
+                  initialValue: _updatedBook.longDescription,
+                  decoration: InputDecoration(labelText: 'Long Description'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Long description is required';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _updatedBook.longDescription = value!,
+                ),
+                TextFormField(
+                  initialValue: _updatedBook.thumbnailUrl,
+                  decoration: InputDecoration(labelText: 'Thumbnail URL'),
+                  // Implement thumbnail upload or selection here
+                  onSaved: (value) => _updatedBook.thumbnailUrl = value!,
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                try {
+                  await bookController.updateBook(_updatedBook);
+                  Get.back(); // Close dialog on success
+                  Get.snackbar('Book Updated', 'Book updated successfully');
+                } catch (error) {
+                  // Handle errors
+                  Get.snackbar('Error', 'Failed to update book: $error');
+                }
+              }
+            },
+            child: Text('Update'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -322,8 +329,8 @@ class BookCard extends StatelessWidget {
           children: [
             // Edit button
             IconButton(
-              // onPressed: () => _showUpdateUserDialog(user),
-              onPressed: () {},
+              onPressed: () => _showUpdateBookDialog(book),
+              // onPressed: () {},
               icon: Icon(Icons.edit),
             ),
             // Delete button (with admin-specific logic)

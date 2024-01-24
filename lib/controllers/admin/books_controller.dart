@@ -39,6 +39,7 @@ class BooksController extends GetxController {
   }
 
   Future<void> updateBook(Book updatedBook) async {
+    print(updatedBook.id);
     try {
       await _booksCollection.doc(updatedBook.id).update(updatedBook.toJson());
       final index = books.indexWhere((book) => book.id == updatedBook.id);
