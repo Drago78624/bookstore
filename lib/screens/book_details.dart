@@ -3,6 +3,7 @@ import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/db.dart';
 import 'package:bookstore/models/cart_book.dart';
 import 'package:bookstore/widgets/custom_heading.dart';
+import 'package:bookstore/widgets/review_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,7 @@ class _BookDetailsState extends State<BookDetails> {
     };
     await db.collection("wishlist").add(data).then((documentSnapshot) =>
         print("Added Data with ID: ${documentSnapshot.id}"));
+    Get.snackbar("Book Added", "${bookData["title"]} Added to Wishlist");
   }
 
   @override
@@ -154,7 +156,7 @@ class _BookDetailsState extends State<BookDetails> {
                     SizedBox(
                       height: 20,
                     ),
-                    if (FirebaseAuth.instance.currentUser != null)
+                    if (FirebaseAuth.instance.currentUser != null) ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -183,7 +185,73 @@ class _BookDetailsState extends State<BookDetails> {
                               child: const Text("Add to Cart",
                                   style: TextStyle(fontSize: 18))),
                         ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Rate and Review",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 10),
+                            RatingBar.builder(
+                              initialRating:
+                                  3.5, // Set initial rating (optional)
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemPadding:
+                                  EdgeInsets.symmetric(horizontal: 4.0),
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {
+                                // Handle rating change (e.g., save rating to database)
+                              },
+                            ),
+
+                            SizedBox(height: 10),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Write your review",
+                              ),
+                              maxLines: 5, // Allow multiple lines for review
+                            ),
+                            SizedBox(height: 10),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Implement review submission logic (e.g., open review form)
+                              },
+                              child: Text("Submit Review"),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Reviews",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 5),
+                            // Placeholder review 1
+                            ReviewCard(
+                                authorName: "John Doe",
+                                rating: 4.5,
+                                review:
+                                    "This book was a great read! It kept me engaged and I learned a lot."),
+                            // Placeholder review 2
+                            ReviewCard(
+                                authorName: "Jane Smith",
+                                rating: 3.8,
+                                review:
+                                    "The story was interesting, but I found the ending a bit predictable."),
+                          ],
+                        ),
                       )
+                    ]
                   ],
                 ),
               ),

@@ -8,10 +8,12 @@ import 'package:bookstore/screens/home_screen.dart';
 import 'package:bookstore/screens/results.dart';
 import 'package:bookstore/screens/shop.dart';
 import 'package:bookstore/screens/user_profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:bookstore/db.dart';
 
 enum BookFilter { category, author }
 
@@ -29,6 +31,7 @@ class _RootState extends State<Root> {
   String? name;
   final cartController = Get.find<CartController>();
   bool isUserAdmin = false;
+  // final docRef = db.collection("cities").doc("SF");
 
   @override
   void initState() {

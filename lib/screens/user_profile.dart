@@ -2,7 +2,9 @@ import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/models/user.dart';
 import 'package:bookstore/screens/addresses.dart';
 import 'package:bookstore/screens/admin/books_panel.dart';
+import 'package:bookstore/screens/admin/orders_panel.dart';
 import 'package:bookstore/screens/admin/users_panel.dart';
+import 'package:bookstore/screens/orders_history.dart';
 import 'package:bookstore/screens/payment_methods.dart';
 import 'package:bookstore/screens/wishlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -123,7 +125,25 @@ class _UserProfileState extends State<UserProfile> {
                           ],
                         ),
                       ),
-                      const Divider()
+                      const Divider(),
+                      TextButton(
+                        onPressed: () {
+                          Get.to(OrdersPanel());
+                        },
+                        child: const Row(
+                          children: [
+                            Text(
+                              "Orders",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                            Spacer(),
+                            Icon(Icons.arrow_forward),
+                          ],
+                        ),
+                      ),
+                      Divider()
                     ],
                     if (!userData!.isAdmin) ...[
                       const Divider(),
@@ -148,7 +168,9 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                       const Divider(),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(OrderHistory());
+                        },
                         child: const Row(
                           children: [
                             Text(

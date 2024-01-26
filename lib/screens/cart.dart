@@ -1,6 +1,7 @@
 import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/db.dart';
 import 'package:bookstore/models/cart_book.dart';
+import 'package:bookstore/screens/checkout.dart';
 import 'package:bookstore/widgets/cart_book_card.dart';
 import 'package:bookstore/widgets/custom_heading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,14 +41,24 @@ class _CartState extends State<Cart> {
                     Expanded(
                       child: Align(
                         alignment: Alignment.bottomCenter,
-                        child: Row(children: [
-                          const CustomHeading("Total"),
-                          const Spacer(),
-                          Text(
-                            "\$${cartController.total}",
-                            style: const TextStyle(fontSize: 18),
-                          )
-                        ]),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(children: [
+                              const CustomHeading("Total"),
+                              const Spacer(),
+                              Text(
+                                "\$${cartController.total}",
+                                style: const TextStyle(fontSize: 18),
+                              )
+                            ]),
+                            ElevatedButton(
+                                onPressed: () {
+                                  Get.to(CheckoutPage());
+                                },
+                                child: Text("Checkout"))
+                          ],
+                        ),
                       ),
                     )
                   ],
