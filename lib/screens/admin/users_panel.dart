@@ -1,4 +1,5 @@
 import 'package:bookstore/controllers/admin/users_controller.dart';
+import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,20 +13,47 @@ class UsersPanel extends StatefulWidget {
 
 class _UsersPanelState extends State<UsersPanel> {
   final UserController userController = Get.put(UserController());
+  final searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Users Management'),
       ),
-      body: Obx(
-        () => ListView.builder(
-          itemCount: userController.users.length,
-          itemBuilder: (context, index) {
-            final user = userController.users[index];
-            return UserCard(user: user);
-          },
-        ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                CustomTextField(
+                  fieldController: searchController,
+                  fieldValidator: (value) => value!.isEmpty
+                      ? "Please enter some book, genre, or author's name"
+                      : null,
+                  label: "Search",
+                  hint: "Book, Author, Genre ",
+                  // onChanged: (value) => searchDocuments(value),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Obx(
+              () => ListView.builder(
+                itemCount: userController.users.length,
+                itemBuilder: (context, index) {
+                  final user = userController.users[index];
+                  return UserCard(user: user);
+                },
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddUserDialog(),
@@ -110,10 +138,12 @@ class _UsersPanelState extends State<UsersPanel> {
                 try {
                   await userController.addUser(_newUser);
                   Get.back(); // Close dialog on success
-                  Get.snackbar('User Added', 'User added successfully');
+                  Get.snackbar('User Added', 'User added successfully',
+                      snackPosition: SnackPosition.BOTTOM);
                 } catch (error) {
                   // Handle errors
-                  Get.snackbar('Error', 'Failed to add user: $error');
+                  Get.snackbar('Error', 'Failed to add user: $error',
+                      snackPosition: SnackPosition.BOTTOM);
                 }
               }
             },
@@ -200,10 +230,12 @@ class UserCard extends StatelessWidget {
                 try {
                   await userController.updateUser(_updatedUser);
                   Get.back(); // Close dialog on success
-                  Get.snackbar('User Updated', 'User updated successfully');
+                  Get.snackbar('User Updated', 'User updated successfully',
+                      snackPosition: SnackPosition.BOTTOM);
                 } catch (error) {
                   // Handle errors
-                  Get.snackbar('Error', 'Failed to update user: $error');
+                  Get.snackbar('Error', 'Failed to update user: $error',
+                      snackPosition: SnackPosition.BOTTOM);
                 }
               }
             },
@@ -255,9 +287,11 @@ class UserCard extends StatelessWidget {
               try {
                 await userController.deleteUser(user.id);
                 Get.back(); // Close dialog on success
-                Get.snackbar('User Deleted', 'User deleted successfully');
+                Get.snackbar('User Deleted', 'User deleted successfully',
+                    snackPosition: SnackPosition.BOTTOM);
               } catch (error) {
-                Get.snackbar('Error', 'Failed to delete user: $error');
+                Get.snackbar('Error', 'Failed to delete user: $error',
+                    snackPosition: SnackPosition.BOTTOM);
               }
             },
             child: Text('Delete'),

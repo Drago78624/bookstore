@@ -1,6 +1,5 @@
 import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/helpers/check_auth_user.dart';
-import 'package:bookstore/helpers/get_current_userdata.dart';
 import 'package:bookstore/screens/authors.dart';
 import 'package:bookstore/screens/cart.dart';
 import 'package:bookstore/screens/categories.dart';
@@ -31,7 +30,28 @@ class _RootState extends State<Root> {
   String? name;
   final cartController = Get.find<CartController>();
   bool isUserAdmin = false;
-  // final docRef = db.collection("cities").doc("SF");
+
+  findIsUserAdmin() {
+    FirebaseFirestore.instance
+        .collection("users")
+        .where("admin", isEqualTo: true)
+        .get()
+        .then(
+      (querySnapshot) {
+        print("Successfully completed");
+        for (var docSnapshot in querySnapshot.docs) {
+          final data = docSnapshot.data();
+          if (data["uid"] == FirebaseAuth.instance.currentUser!.uid) {
+            setState(() {
+              isUserAdmin = data["admin"];
+            });
+          }
+          print('${docSnapshot.id} => ${docSnapshot.data()}');
+        }
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+  }
 
   @override
   void initState() {
@@ -41,6 +61,7 @@ class _RootState extends State<Root> {
       userId = FirebaseAuth.instance.currentUser!.uid;
       cartController.fetchCartItems();
     }
+    findIsUserAdmin();
   }
 
   void _onItemTapped(int index) {
@@ -104,13 +125,12 @@ class _RootState extends State<Root> {
         actions: [
           if (!checkUserAuth())
             IconButton(
-              // style: TextButton.styleFrom(foregroundColor: Colors.white),
               onPressed: () {
                 Get.toNamed("/login");
               },
               icon: const Icon(Icons.login),
             )
-          else
+          else if (!isUserAdmin)
             Obx(
               () => badges.Badge(
                 position: badges.BadgePosition.topStart(),

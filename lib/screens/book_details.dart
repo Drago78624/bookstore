@@ -28,14 +28,35 @@ class _BookDetailsState extends State<BookDetails> {
 
   Map<String, dynamic> bookData = {};
   bool loading = false;
+  bool isUserAdmin = false;
+
+  findIsUserAdmin() {
+    FirebaseFirestore.instance
+        .collection("users")
+        .where("admin", isEqualTo: true)
+        .get()
+        .then(
+      (querySnapshot) {
+        print("Successfully completed");
+        for (var docSnapshot in querySnapshot.docs) {
+          final data = docSnapshot.data();
+          if (data["uid"] == FirebaseAuth.instance.currentUser!.uid) {
+            setState(() {
+              isUserAdmin = data["admin"];
+            });
+          }
+          print('${docSnapshot.id} => ${docSnapshot.data()}');
+        }
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    // bookReviewsController = Get.put(BookReviewsController(),
-    //     tag: widget.bookId); // Initialize in initState
     getBookDetails();
-    // bookReviewsController.fetchReviews(bookId: widget.bookId);
+    findIsUserAdmin();
   }
 
   getBookDetails() async {
@@ -69,7 +90,8 @@ class _BookDetailsState extends State<BookDetails> {
     };
     await db.collection("wishlist").add(data).then((documentSnapshot) =>
         print("Added Data with ID: ${documentSnapshot.id}"));
-    Get.snackbar("Book Added", "${bookData["title"]} Added to Wishlist");
+    Get.snackbar("Book Added", "${bookData["title"]} Added to Wishlist",
+        snackPosition: SnackPosition.BOTTOM);
   }
 
   @override
@@ -156,7 +178,8 @@ class _BookDetailsState extends State<BookDetails> {
                     SizedBox(
                       height: 20,
                     ),
-                    if (FirebaseAuth.instance.currentUser != null) ...[
+                    if (FirebaseAuth.instance.currentUser != null &&
+                        !isUserAdmin) ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

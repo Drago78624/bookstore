@@ -1,7 +1,11 @@
 import 'package:bookstore/controllers/admin/books_controller.dart';
+import 'package:bookstore/widgets/custom_text_field.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+
+final _searchFormKey = GlobalKey<FormState>();
 
 class BooksPanel extends StatefulWidget {
   const BooksPanel({super.key});
@@ -12,6 +16,7 @@ class BooksPanel extends StatefulWidget {
 
 class _BooksPanelState extends State<BooksPanel> {
   final BooksController bookController = Get.put(BooksController());
+  final searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +24,42 @@ class _BooksPanelState extends State<BooksPanel> {
       appBar: AppBar(
         title: Text('Books Management'),
       ),
-      body: Obx(
-        () => ListView.builder(
-          itemCount: bookController.books.length,
-          itemBuilder: (context, index) {
-            final book = bookController.books[index];
-            return BookCard(book: book);
-          },
-        ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              key: _searchFormKey,
+              child: Column(
+                children: [
+                  CustomTextField(
+                    fieldController: searchController,
+                    fieldValidator: (value) => value!.isEmpty
+                        ? "Please enter some book, genre, or author's name"
+                        : null,
+                    label: "Search",
+                    hint: "Book, Author, Genre ",
+                    // onChanged: (value) => searchDocuments(value),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Obx(
+              () => ListView.builder(
+                itemCount: bookController.books.length,
+                itemBuilder: (context, index) {
+                  final book = bookController.books[index];
+                  return BookCard(book: book);
+                },
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddBookDialog(),
@@ -168,10 +201,12 @@ class _BooksPanelState extends State<BooksPanel> {
                   await bookController
                       .addBook(_newBook); // Assuming a method in BookController
                   Get.back(); // Close dialog on success
-                  Get.snackbar('Book Added', 'Book added successfully');
+                  Get.snackbar('Book Added', 'Book added successfully',
+                      snackPosition: SnackPosition.BOTTOM);
                 } catch (error) {
                   // Handle errors
-                  Get.snackbar('Error', 'Failed to add book: $error');
+                  Get.snackbar('Error', 'Failed to add book: $error',
+                      snackPosition: SnackPosition.BOTTOM);
                 }
               }
             },
@@ -304,10 +339,12 @@ class BookCard extends StatelessWidget {
                 try {
                   await bookController.updateBook(_updatedBook);
                   Get.back(); // Close dialog on success
-                  Get.snackbar('Book Updated', 'Book updated successfully');
+                  Get.snackbar('Book Updated', 'Book updated successfully',
+                      snackPosition: SnackPosition.BOTTOM);
                 } catch (error) {
                   // Handle errors
-                  Get.snackbar('Error', 'Failed to update book: $error');
+                  Get.snackbar('Error', 'Failed to update book: $error',
+                      snackPosition: SnackPosition.BOTTOM);
                 }
               }
             },
@@ -360,9 +397,11 @@ class BookCard extends StatelessWidget {
               try {
                 await bookController.deleteBook(book.id);
                 Get.back(); // Close dialog on success
-                Get.snackbar('Book Deleted', 'Book deleted successfully');
+                Get.snackbar('Book Deleted', 'Book deleted successfully',
+                    snackPosition: SnackPosition.BOTTOM);
               } catch (error) {
-                Get.snackbar('Error', 'Failed to delete book: $error');
+                Get.snackbar('Error', 'Failed to delete book: $error',
+                    snackPosition: SnackPosition.BOTTOM);
               }
             },
             child: Text('Delete'),
