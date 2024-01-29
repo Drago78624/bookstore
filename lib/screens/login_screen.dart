@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/controllers/payment_methods_controller.dart';
 import 'package:bookstore/db.dart';
@@ -10,7 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:getwidget/getwidget.dart';
 
 final _loginFormKey = GlobalKey<FormState>();
 

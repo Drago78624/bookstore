@@ -1,7 +1,6 @@
 import 'package:bookstore/db.dart';
 import 'package:bookstore/widgets/address_card.dart';
 import 'package:bookstore/widgets/new_address.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Addresses extends StatefulWidget {

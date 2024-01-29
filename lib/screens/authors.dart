@@ -1,8 +1,6 @@
-import 'package:bookstore/helpers/colors.dart';
 import 'package:bookstore/screens/root.dart';
 import 'package:bookstore/widgets/author_card.dart';
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 
 const authorsAvailable = [
   "W. Frank Ableson",

@@ -1,8 +1,6 @@
 import 'package:bookstore/controllers/payment_methods_controller.dart';
-import 'package:bookstore/db.dart';
 import 'package:bookstore/screens/add_payment_method.dart';
 import 'package:bookstore/widgets/custom_heading.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,10 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:bookstore/screens/book_details.dart';
 import 'package:flutter/material.dart';
-
 import 'package:bookstore/controllers/cart_controller.dart';
 import 'package:bookstore/models/cart_book.dart';
-import 'package:get/get.dart';
 
 class CartBookCard extends StatelessWidget {
   CartBookCard({
