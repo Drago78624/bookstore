@@ -225,9 +225,9 @@ class _UserProfileState extends State<UserProfile> {
                     TextButton(
                       onPressed: () async {
                         await FirebaseAuth.instance.signOut();
+                        Get.delete<CartController>();
                         Get.offNamed('/root');
                         widget.changeScreen(0);
-                        Get.delete<CartController>();
                       },
                       child: const Row(
                         children: [
